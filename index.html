@@ -4,158 +4,401 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>이세계 술집의 비밀 전시관</title>
+<title>어느 이세계의 비밀 전시관</title>
 
 <style>
-* { box-sizing: border-box; }
+* {
+  box-sizing: border-box;
+}
 
 body {
   margin: 0;
-  background: #21180f;
-  color: #f4dfb9;
-  font-family: sans-serif;
+  background: #17110d;
+  color: #f5e4c5;
+  font-family: "Malgun Gothic", sans-serif;
   text-align: center;
 }
 
 .scene {
   min-height: 100vh;
-  padding: 35px 20px;
+  padding: 30px 20px;
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
-  gap: 18px;
+  align-items: center;
+  gap: 20px;
 }
 
-.hidden { display: none; }
+.hidden {
+  display: none !important;
+}
 
-h1 { margin: 0; }
+button {
+  background: #81552f;
+  color: #fff3d8;
+  border: 1px solid #cda46d;
+  border-radius: 8px;
+  padding: 13px 25px;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+button:hover {
+  background: #a06e3d;
+}
+
+/* 프롤로그 */
+
+#prologue {
+  background: radial-gradient(
+    circle at center,
+    #34251a,
+    #120e0b
+  );
+}
+
+.chapter {
+  color: #c6a374;
+  letter-spacing: 4px;
+  font-size: 13px;
+}
+
+.story-box {
+  width: min(600px, 100%);
+  min-height: 210px;
+  background: rgba(51, 35, 24, 0.9);
+  border: 1px solid #8b653e;
+  border-radius: 12px;
+  padding: 35px 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#storyText {
+  font-size: 18px;
+  line-height: 2.1;
+  white-space: pre-line;
+}
+
+#storyCount {
+  color: #b69a75;
+  font-size: 13px;
+}
+
+/* 술집 내부 */
+
+#tavern {
+  background:
+    linear-gradient(
+      rgba(35, 22, 13, 0.35),
+      rgba(20, 13, 8, 0.85)
+    ),
+    repeating-linear-gradient(
+      90deg,
+      #654026 0px,
+      #70492c 65px,
+      #4d301e 69px,
+      #654026 74px
+    );
+}
+
+.tavern-title {
+  font-size: 30px;
+  color: #ffe1a4;
+  text-shadow: 0 3px 10px #2b1607;
+}
+
+.description {
+  color: #ead0a8;
+  line-height: 1.8;
+}
+
+/* 창고 문 */
+
+.door-sign {
+  background: #654123;
+  color: #f5dfb8;
+  border: 2px solid #b88b55;
+  border-radius: 4px;
+  padding: 7px 24px;
+  font-size: 16px;
+}
 
 .door-frame {
-  width: 185px;
-  height: 290px;
+  width: 195px;
+  height: 300px;
   padding: 8px;
-  background: #3b2415;
-  border: 6px solid #9d6a3c;
+  background: #2b190e;
+  border: 7px solid #9e6b3d;
   border-radius: 8px 8px 2px 2px;
   perspective: 700px;
   cursor: pointer;
 }
 
 .door {
-  position: relative;
   width: 100%;
   height: 100%;
+  position: relative;
   background: repeating-linear-gradient(
     90deg,
-    #704523 0px,
-    #8e5d34 26px,
-    #5b371e 29px,
-    #704523 32px
+    #6b4223 0px,
+    #895830 29px,
+    #533119 32px,
+    #6b4223 35px
   );
-  border: 3px solid #ad7845;
+  border: 3px solid #b17c48;
   transform-origin: left center;
-  transition: transform 1.2s ease;
+  transition: transform 1.3s ease;
 }
 
 .door.open {
   transform: rotateY(-78deg);
 }
 
+.door-panel {
+  position: absolute;
+  left: 12%;
+  width: 76%;
+  height: 36%;
+  border: 3px solid rgba(38, 20, 9, 0.55);
+  box-shadow: inset 0 0 0 2px rgba(204, 146, 76, 0.35);
+}
+
+.door-panel.top {
+  top: 7%;
+}
+
+.door-panel.bottom {
+  bottom: 7%;
+}
+
 .handle {
   position: absolute;
   right: 12px;
-  top: 49%;
-  width: 13px;
-  height: 13px;
-  background: #d5ac65;
+  top: 48%;
+  width: 15px;
+  height: 15px;
+  background: #d9ad62;
+  border: 2px solid #66401e;
   border-radius: 50%;
-  border: 2px solid #63401f;
 }
 
-.sign {
-  background: #684323;
-  border: 2px solid #c49a61;
-  padding: 7px 22px;
-  border-radius: 4px;
+.door-frame:hover .handle {
+  box-shadow: 0 0 12px #f4c678;
 }
 
-button {
-  padding: 12px 22px;
-  background: #82552e;
-  border: 1px solid #d5ab6c;
-  border-radius: 8px;
-  color: white;
-  cursor: pointer;
+#doorMessage {
+  min-height: 25px;
+  color: #f1d3a0;
 }
 
-button:hover { background: #a06e3b; }
+/* 비밀 전시관 */
 
 #gallery {
   background: radial-gradient(
     ellipse at center,
-    #654529,
-    #21180f
+    #705031,
+    #1c140e
   );
+}
+
+.gallery-box {
+  width: min(600px, 100%);
+  border: 2px solid #ba915c;
+  background: rgba(31, 21, 14, 0.75);
+  padding: 40px 25px;
+  border-radius: 12px;
+  line-height: 2;
+}
+
+.gallery-box h1 {
+  color: #ffe0a0;
+}
+
+@media (max-width: 480px) {
+  .tavern-title {
+    font-size: 24px;
+  }
+
+  #storyText {
+    font-size: 16px;
+  }
 }
 </style>
 </head>
 
 <body>
 
-<section class="scene" id="tavern">
-  <h1>🍷 어느 이세계의 술집</h1>
-  <p>술집 뒤편에 낡은 창고 문이 보인다.</p>
+<!-- 1. 프롤로그 -->
 
-  <div class="sign">창고</div>
+<section class="scene" id="prologue">
 
-  <div class="door-frame"
-       onclick="openDoor()"
-       role="button"
-       tabindex="0"
-       aria-label="창고 문 열기"
-       onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openDoor();}">
+  <div class="chapter">PROLOGUE</div>
+
+  <h1>어느 이세계의 술집</h1>
+
+  <div class="story-box">
+    <p id="storyText"></p>
+  </div>
+
+  <p id="storyCount"></p>
+
+  <button id="storyButton" onclick="nextStory()">
+    다음 이야기 →
+  </button>
+
+</section>
+
+
+<!-- 2. 술집 내부 -->
+
+<section class="scene hidden" id="tavern">
+
+  <h1 class="tavern-title">
+    어느 이세계의 술집
+  </h1>
+
+  <p class="description">
+    익숙한 나무 향기와 따뜻한 불빛.<br>
+    그런데 술집 안쪽에 낯선 문이 보인다.
+  </p>
+
+  <div class="door-sign">창고</div>
+
+  <div
+    class="door-frame"
+    role="button"
+    tabindex="0"
+    aria-label="창고 문 열기"
+    onclick="openDoor()"
+    onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openDoor();}"
+  >
     <div class="door" id="door">
+      <div class="door-panel top"></div>
+      <div class="door-panel bottom"></div>
       <div class="handle"></div>
     </div>
   </div>
 
-  <p id="message">문을 클릭해 보세요.</p>
+  <p id="doorMessage">
+    문을 클릭해 보세요.
+  </p>
+
 </section>
+
+
+<!-- 3. 비밀 전시관 -->
 
 <section class="scene hidden" id="gallery">
-  <h1>🖼️ 비밀 전시관</h1>
-  <p>오래된 창고 문 너머에는...</p>
-  <h2>당신을 위한 작은 전시관이 있었다.</h2>
-  <p>전시관은 현재 준비 중입니다.</p>
-  <button onclick="goBack()">술집으로 돌아가기</button>
+
+  <div class="gallery-box">
+
+    <p class="chapter">SECRET EXHIBITION</p>
+
+    <h1>비밀 전시관</h1>
+
+    <p>
+      평범한 창고라고 생각했던 문 너머에는<br>
+      예상하지 못한 공간이 펼쳐져 있었다.
+    </p>
+
+    <p>
+      이곳은 당신을 위해 준비된<br>
+      아주 작은 이야기들의 전시관.
+    </p>
+
+    <p>✦ 전시 준비 중 ✦</p>
+
+    <button onclick="goBack()">
+      술집으로 돌아가기
+    </button>
+
+  </div>
+
 </section>
 
+
 <script>
+
+/* 프롤로그 이야기 */
+
+const story = [
+  "수많은 세계가 존재하는 어딘가.\n그곳에는 작은 술집 하나가 있었다.",
+
+  "그리고 오늘도 그 술집의 주인은\n여느 때처럼 가게로 향하고 있었다.",
+
+  "익숙한 길, 익숙한 풍경.\n오늘도 평범한 하루가 시작될 터였다.",
+
+  "낡은 나무 간판과 따뜻한 불빛.\n주인은 익숙한 술집 안으로 들어섰다.",
+
+  "그런데 문득,\n술집 안쪽에서 낯선 무언가가 눈에 들어왔다.",
+
+  "……응?\n저쪽에 저런 문이 있었던가?"
+];
+
+let storyIndex = 0;
 let moving = false;
+
+function showStory() {
+  document.getElementById("storyText").textContent =
+    story[storyIndex];
+
+  document.getElementById("storyCount").textContent =
+    (storyIndex + 1) + " / " + story.length;
+
+  document.getElementById("storyButton").textContent =
+    storyIndex === story.length - 1
+      ? "술집 둘러보기 →"
+      : "다음 이야기 →";
+}
+
+function nextStory() {
+  if (storyIndex < story.length - 1) {
+    storyIndex++;
+    showStory();
+  } else {
+    document.getElementById("prologue").classList.add("hidden");
+    document.getElementById("tavern").classList.remove("hidden");
+  }
+}
+
+/* 창고 문 열기 */
 
 function openDoor() {
   if (moving) return;
+
   moving = true;
 
   document.getElementById("door").classList.add("open");
-  document.getElementById("message").textContent =
+
+  document.getElementById("doorMessage").textContent =
     "끼이익... 문이 천천히 열린다.";
 
   setTimeout(() => {
     document.getElementById("tavern").classList.add("hidden");
     document.getElementById("gallery").classList.remove("hidden");
     moving = false;
-  }, 1300);
+  }, 1400);
 }
+
+/* 술집으로 돌아가기 */
 
 function goBack() {
   document.getElementById("gallery").classList.add("hidden");
   document.getElementById("tavern").classList.remove("hidden");
+
   document.getElementById("door").classList.remove("open");
-  document.getElementById("message").textContent =
+
+  document.getElementById("doorMessage").textContent =
     "문을 클릭해 보세요.";
 }
+
+/* 시작 */
+
+showStory();
+
 </script>
 
 </body>
