@@ -1,106 +1,35 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>어느 이세계의 비밀 전시관</title>
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>주인장을 위한 비밀 전시관</title>
 <style>
-*{box-sizing:border-box}
-body{margin:0;background:#17110d;color:#f5e4c5;font-family:'Malgun Gothic',sans-serif;text-align:center}
-.scene{min-height:100vh;min-height:100dvh;padding:24px 18px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px}
-.hidden{display:none!important}
-button{font:inherit;background:#80532d;color:#fff3d8;border:1px solid #cda46d;border-radius:9px;padding:12px 24px;cursor:pointer}
-button:hover,button:focus-visible{background:#a06e3d;outline:2px solid #e6c28b;outline-offset:2px}
-#prologue{background:#17120f}
-.chapter{color:#e0bd83;font-size:12px;letter-spacing:4px}
-.prologue-art{position:relative;width:min(960px,100%);aspect-ratio:16/9;border:1px solid #88613d;border-radius:12px;overflow:hidden;background:linear-gradient(135deg,#564039,#241c20)}
-.prologue-art img{width:100%;height:100%;object-fit:cover;display:block;animation:slowZoom 20s ease-out both}
-.prologue-art:after{content:'';position:absolute;inset:0;background:linear-gradient(transparent 55%,rgba(16,10,8,.45));pointer-events:none}
-@keyframes slowZoom{from{transform:scale(1)}to{transform:scale(1.07)}}
-.story-box{width:min(800px,100%);min-height:150px;background:rgba(43,30,23,.97);border:1px solid #997048;border-radius:12px;padding:23px;display:flex;align-items:center;justify-content:center}
-#storyText{font-size:clamp(15px,2.4vw,19px);line-height:1.95;white-space:pre-line;margin:0}
-#storyCount{color:#c2a27a;font-size:13px;margin:0}
-#tavern{background:linear-gradient(rgba(35,22,13,.35),rgba(20,13,8,.85)),repeating-linear-gradient(90deg,#654026 0px,#70492c 65px,#4d301e 69px,#654026 74px)}
-.tavern-title{color:#ffe1a4;text-shadow:0 3px 10px #2b1607}
-.description{line-height:1.8}
-.door-sign{background:#654123;border:2px solid #b88b55;border-radius:4px;padding:7px 24px}
-.door-frame{width:195px;height:300px;padding:8px;background:#2b190e;border:7px solid #9e6b3d;border-radius:8px 8px 2px 2px;perspective:700px;cursor:pointer}
-.door-frame:focus-visible{outline:3px solid #f5d99e;outline-offset:5px}
-.door{width:100%;height:100%;position:relative;background:repeating-linear-gradient(90deg,#6b4223 0px,#895830 29px,#533119 32px,#6b4223 35px);border:3px solid #b17c48;transform-origin:left center;transition:transform 1.3s ease}
-.door.open{transform:rotateY(-78deg)}
-.door-panel{position:absolute;left:12%;width:76%;height:36%;border:3px solid rgba(38,20,9,.55);box-shadow:inset 0 0 0 2px rgba(204,146,76,.35)}
-.door-panel.top{top:7%}.door-panel.bottom{bottom:7%}
-.handle{position:absolute;right:12px;top:48%;width:15px;height:15px;background:#d9ad62;border:2px solid #66401e;border-radius:50%}
-.door-frame:hover .handle{box-shadow:0 0 12px #f4c678}
-#doorMessage{min-height:25px}
-#gallery{background:radial-gradient(ellipse at center,#705031,#1c140e)}
-.gallery-box{width:min(600px,100%);border:2px solid #ba915c;background:rgba(31,21,14,.75);padding:38px 24px;border-radius:12px;line-height:2}
-.gallery-box h1{color:#ffe0a0}
-@media(max-width:600px){.scene{padding:16px 12px;gap:12px}.story-box{min-height:170px;padding:18px}.prologue-art{aspect-ratio:4/3}.prologue-art img{object-position:40% center}}
-@media(prefers-reduced-motion:reduce){.prologue-art img{animation:none}.door{transition:none}}
-</style>
-</head>
-<body>
-<section class="scene" id="prologue">
-  <div class="chapter">PROLOGUE</div>
-  <div class="prologue-art"><img src="prologue.png" alt="은발의 용이 따뜻한 불빛의 술집으로 향하는 뒷모습"></div>
-  <div class="story-box"><p id="storyText" aria-live="polite"></p></div>
-  <p id="storyCount"></p>
-  <button id="storyButton" onclick="nextStory()">다음 이야기 →</button>
-</section>
-<section class="scene hidden" id="tavern">
-  <h1 class="tavern-title">어느 이세계의 술집</h1>
-  <p class="description">익숙한 나무 향기와 따뜻한 불빛.<br>그런데 술집 안쪽에 낯선 문이 보인다.</p>
-  <div class="door-sign">창고</div>
-  <div class="door-frame" role="button" tabindex="0" aria-label="창고 문 열기" onclick="openDoor()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openDoor();}">
-    <div class="door" id="door"><div class="door-panel top"></div><div class="door-panel bottom"></div><div class="handle"></div></div>
-  </div>
-  <p id="doorMessage">문을 클릭해 보세요.</p>
-</section>
-<section class="scene hidden" id="gallery">
-  <div class="gallery-box">
-    <p class="chapter">SECRET EXHIBITION</p>
-    <h1>비밀 전시관</h1>
-    <p>평범한 창고라고 생각했던 문 너머에는<br>예상하지 못한 공간이 펼쳐져 있었다.</p>
-    <p>이곳은 당신을 위해 준비된<br>아주 작은 이야기들의 전시관.</p>
-    <p>✦ 전시 준비 중 ✦</p>
-    <button onclick="goBack()">술집으로 돌아가기</button>
-  </div>
-</section>
+:root{--gold:#d5b47c;--ink:#151319;--cream:#f5ebd9}*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:#141118;color:var(--cream);font-family:'Malgun Gothic','Apple SD Gothic Neo',sans-serif}button{font:inherit;cursor:pointer}button:focus-visible,[role=button]:focus-visible{outline:3px solid #ffe7ad;outline-offset:4px}.hidden{display:none!important}.scene{min-height:100vh;min-height:100dvh;display:flex;align-items:center;justify-content:center;flex-direction:column;padding:20px;gap:15px}.eyebrow{font-size:12px;letter-spacing:.3em;color:var(--gold)}.btn{background:#2a2224;border:1px solid var(--gold);color:var(--cream);border-radius:9px;padding:11px 21px}.btn:hover{background:#493831}.muted{color:#d5c7b6;font-size:14px}.art{position:relative;width:min(980px,100%);aspect-ratio:16/9;overflow:hidden;border-radius:12px;border:1px solid #816c55;background:#201a20}.art img{width:100%;height:100%;object-fit:cover;display:block;animation:zoom 14s ease-out both}@keyframes zoom{from{transform:scale(1)}to{transform:scale(1.04)}}.story{width:min(820px,100%);background:#2a2224;border:1px solid #816c55;border-radius:12px;padding:20px;min-height:112px;display:grid;place-items:center;text-align:center;line-height:1.85;white-space:pre-line}.story p{margin:0}.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}#tavern{background:radial-gradient(circle at 50% 28%,#6b4935,#251a1a 68%,#100d12)}.door-label{border:1px solid #b18b5b;background:#4b3026;padding:7px 28px}.door-frame{height:280px;width:185px;border:10px ridge #9b7248;background:#0b0a10;perspective:750px;cursor:pointer}.door{width:100%;height:100%;position:relative;background:repeating-linear-gradient(90deg,#6c452c 0 28px,#4a2d20 30px 35px,#865737 36px 60px);transform-origin:left;transition:transform 1.2s ease}.door.open{transform:rotateY(-78deg)}.door:before,.door:after{content:'';position:absolute;left:13%;width:74%;height:33%;border:3px solid #422719;box-shadow:inset 0 0 0 2px #ae8150}.door:before{top:7%}.door:after{bottom:7%}.knob{position:absolute;right:10px;top:49%;background:#e7c477;border:2px solid #7b5729;border-radius:50%;width:17px;height:17px}
+#museum{padding:15px 12px 20px;gap:10px;background:#0c0c12}.museum-frame{position:relative;width:min(1200px,100%);aspect-ratio:3/2;border:1px solid #8d7d6e;border-radius:10px;overflow:hidden;box-shadow:0 15px 60px #0008;background:#27242a}.museum-frame>img{display:block;width:100%;height:100%;object-fit:fill}.museum-frame:after{content:'';position:absolute;inset:0;pointer-events:none;background:linear-gradient(0deg,#0b0a12aa 0%,transparent 22%)}.hotspot{position:absolute;z-index:2;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:3px;border:1px solid #f4dbab9c;background:#18131bbd;color:#fff1ce;box-shadow:0 0 16px #e6b66c55;border-radius:11px;padding:8px 10px;transform:translate(-50%,-50%);min-width:100px;transition:background .2s,scale .2s;backdrop-filter:blur(2px)}.hotspot:hover{background:#5a403b;scale:1.04}.hotspot .symbol{font-size:24px}.hotspot small{font-size:11px;color:#f2d9ad}.hotspot.invite{left:17%;top:72%}.hotspot.gift{left:82%;top:72%}.hotspot.hourglass{left:30%;top:40%}.hotspot.guestbook{left:70%;top:40%}.hotspot.finale{left:50%;top:23%;background:#1d1a21d9;border-color:#a79579}.museum-caption{max-width:1100px;text-align:center;color:#e8d9bf;font-size:14px;line-height:1.6}
+.overlay{position:fixed;inset:0;z-index:10;background:#0b0910ed;display:flex;justify-content:center;align-items:center;padding:18px}.modal{position:relative;width:min(850px,100%);max-height:94vh;overflow:auto;border:1px solid #a78c65;background:#201a20;border-radius:14px;padding:20px;display:flex;flex-direction:column;align-items:center;gap:12px;box-shadow:0 10px 65px #000b}.modal h2{font-size:clamp(19px,3vw,26px);margin:0;color:#f3d7a4}.modal p{line-height:1.7;text-align:center;margin:0}.invitation-photo{display:block;max-width:100%;max-height:58vh;object-fit:contain;border-radius:7px}.close{align-self:flex-end;background:transparent;color:white;border:1px solid #9c896f;border-radius:7px;padding:6px 13px}.status{font-size:12px;color:#d7c4a6}.badge{font-size:12px;border:1px solid #a58b68;padding:5px 12px;border-radius:30px;color:#e6d2b3}@media(max-width:650px){.art{aspect-ratio:4/3}.art img{object-position:center}.scene{padding:13px}.hotspot{min-width:0;padding:5px;font-size:11px;border-radius:7px}.hotspot .symbol{font-size:16px}.hotspot small{font-size:9px}.museum-frame{aspect-ratio:3/2}.modal{padding:12px}.invitation-photo{max-height:53vh}}@media(prefers-reduced-motion:reduce){.art img{animation:none}.door{transition:none}}
+</style></head><body>
+<section id="prologue" class="scene"><div class="eyebrow">PROLOGUE</div><div class="art"><img id="prologueImage" src="prologue.png" alt="술집으로 향하는 주인장"></div><div class="story"><p id="storyText" aria-live="polite"></p></div><div class="muted" id="storyCount"></div><div class="actions"><button class="btn" id="storyNext">다음 이야기 →</button><button class="btn" id="skipStory">창고 문으로 건너뛰기</button></div></section>
+<section id="tavern" class="scene hidden"><div class="eyebrow">THE WIND & HEARTH TAVERN</div><h1>익숙한 술집, 낯선 문</h1><p style="text-align:center;line-height:1.8">술집 안쪽에 오래된 창고 문이 보인다.<br>원래 이런 문이 있었던가?</p><div class="door-label">창고</div><div class="door-frame" id="doorFrame" role="button" tabindex="0" aria-label="창고 문 열기"><div class="door" id="door"><div class="knob"></div></div></div><p class="muted" id="doorMessage">문을 클릭해 보세요.</p><button class="btn" id="backStory">프롤로그로 돌아가기</button></section>
+<section id="museum" class="scene hidden"><div class="eyebrow">SECRET BIRTHDAY EXHIBITION</div><h1 style="margin:0;font-size:clamp(20px,4vw,32px)">비밀 전시관</h1><div class="museum-frame"><img src="museum.png" alt="흰색 대리석과 검은색 장식이 어우러진 비밀 전시관, 네 개의 전시대와 정면 문"><button class="hotspot invite" data-exhibit="invite"><span class="symbol">✉</span><span>① 초대장</span><small>가까운 왼쪽</small></button><button class="hotspot gift" data-exhibit="gift"><span class="symbol">🎁</span><span>② 선물 상자</span><small>가까운 오른쪽</small></button><button class="hotspot hourglass" data-exhibit="hourglass"><span class="symbol">⌛</span><span>③ 모래시계</span><small>안쪽 왼쪽</small></button><button class="hotspot guestbook" data-exhibit="guestbook"><span class="symbol">📖</span><span>④ 방명록</span><small>안쪽 오른쪽</small></button><button class="hotspot finale" data-exhibit="finale"><span class="symbol">✦</span><span>마지막 문</span></button></div><div class="museum-caption">전시대를 눌러 살펴보세요. 초대장은 실제로 열 수 있어요. 나머지 전시물은 제작 중입니다.</div><button class="btn" id="backTavern">창고 문으로 돌아가기</button></section>
+<div class="overlay hidden" id="overlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><div class="modal"><button class="close" id="closeModal" aria-label="닫기">✕ 닫기</button><div class="badge" id="modalBadge">EXHIBIT 01</div><h2 id="modalTitle">수상한 초대장</h2><img id="invitationPhoto" class="invitation-photo hidden" src="invitation_closed.png" alt="검정색과 금색의 닫힌 초대장"><p id="modalDescription"></p><div class="actions" id="modalActions"></div><div class="status" id="modalStatus"></div></div></div>
 <script>
-const story=[
-  '수많은 세계가 존재하는 어딘가.\n그곳에는 작은 술집 하나가 있었다.',
-  '그리고 오늘도 그 술집의 주인은\n여느 때처럼 가게로 향하고 있었다.',
-  '익숙한 길, 익숙한 풍경.\n오늘도 평범한 하루가 시작될 터였다.',
-  '낡은 나무 간판과 따뜻한 불빛.\n주인은 익숙한 술집의 문을 열었다.',
-  '익숙한 나무 향기.\n...그런데 뭔가 조금 다른 것 같은데?',
-  '……응?\n저쪽에 저런 문이 있었던가?'
+'use strict';
+const $=id=>document.getElementById(id);const scenes=['prologue','tavern','museum'];
+const lines=[
+{img:'prologue.png',text:'수많은 세계가 존재하는 어딘가.\n그곳에는 작은 술집 하나가 있었다.'},
+{img:'prologue.png',text:'오늘도 그 술집의 주인은\n여느 때처럼 가게로 향하고 있었다.'},
+{img:'prologue2.png',text:'익숙한 간판, 익숙한 불빛.\n어느새 술집의 문 앞에 도착했다.'},
+{img:'prologue3.png',text:'주인은 손을 뻗어 문고리를 잡았다.'},
+{img:'prologue3.png',text:'끼이익—\n익숙한 술집 문이 천천히 열린다.'},
+{img:'prologue3.png',text:'그런데……\n안쪽에 저런 창고 문이 있었던가?'}
 ];
-let storyIndex=0;
-let moving=false;
-function showStory(){
-  document.getElementById('storyText').textContent=story[storyIndex];
-  document.getElementById('storyCount').textContent=(storyIndex+1)+' / '+story.length;
-  document.getElementById('storyButton').textContent=storyIndex===story.length-1?'술집 둘러보기 →':'다음 이야기 →';
-}
-function nextStory(){
-  if(storyIndex<story.length-1){storyIndex++;showStory();}
-  else{document.getElementById('prologue').classList.add('hidden');document.getElementById('tavern').classList.remove('hidden');}
-}
-function openDoor(){
-  if(moving)return;
-  moving=true;
-  document.getElementById('door').classList.add('open');
-  document.getElementById('doorMessage').textContent='끼이익... 문이 천천히 열린다.';
-  setTimeout(()=>{document.getElementById('tavern').classList.add('hidden');document.getElementById('gallery').classList.remove('hidden');moving=false;},1400);
-}
-function goBack(){
-  document.getElementById('gallery').classList.add('hidden');
-  document.getElementById('tavern').classList.remove('hidden');
-  document.getElementById('door').classList.remove('open');
-  document.getElementById('doorMessage').textContent='문을 클릭해 보세요.';
-}
-showStory();
-</script>
-</body>
-</html>
+// prologue4.png(술집 내부 시점)가 준비되면 마지막 두 장면의 img 값을 변경하면 됩니다.
+let storyIndex=0,opening=false,modalType='',inviteOpened=false;const seen=new Set();
+function scene(name){for(const id of scenes)$(id).classList.toggle('hidden',id!==name);window.scrollTo(0,0)}
+function renderStory(){const s=lines[storyIndex];$('prologueImage').src=s.img;$('storyText').textContent=s.text;$('storyCount').textContent=`${storyIndex+1} / ${lines.length}`;$('storyNext').textContent=storyIndex===lines.length-1?'술집 안으로 →':'다음 이야기 →'}
+$('storyNext').addEventListener('click',()=>{if(storyIndex<lines.length-1){storyIndex++;renderStory()}else scene('tavern')});$('skipStory').addEventListener('click',()=>scene('tavern'));$('backStory').addEventListener('click',()=>scene('prologue'));
+function openDoor(){if(opening)return;opening=true;$('door').classList.add('open');$('doorMessage').textContent='끼이익…… 문 너머로 낯선 빛이 번진다.';setTimeout(()=>{scene('museum');opening=false},1250)}
+$('doorFrame').addEventListener('click',openDoor);$('doorFrame').addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openDoor()}});$('backTavern').addEventListener('click',()=>{scene('tavern');$('door').classList.remove('open');$('doorMessage').textContent='문을 클릭해 보세요.'});
+function makeButton(label,fn){const b=document.createElement('button');b.className='btn';b.textContent=label;b.addEventListener('click',fn);$('modalActions').append(b)}
+function openExhibit(type){modalType=type;$('overlay').classList.remove('hidden');$('modalActions').replaceChildren();$('invitationPhoto').classList.add('hidden');$('modalStatus').textContent='';const info={invite:['EXHIBIT 01','수상한 초대장'],gift:['EXHIBIT 02','주인장을 위한 선물 상자'],hourglass:['EXHIBIT 03','미래를 점치는 모래시계'],guestbook:['EXHIBIT 04','끝나지 않는 방명록'],finale:['FINALE','오늘의 주인공']};$('modalBadge').textContent=info[type][0];$('modalTitle').textContent=info[type][1];if(type==='invite'){renderInvitation();return}const desc={gift:'선물 상자와 개인 편지를 선택할 수 있는 전시를 준비하고 있어요. 실제 선물은 방송 중 직접 전달할 예정입니다.',hourglass:'장난스러운 예언과 따뜻한 응원이 담길 모래시계 전시를 준비하고 있어요.',guestbook:'방문자가 이름과 짧은 축하 메시지를 남기고, 나중에도 다시 볼 수 있는 공동 방명록을 준비하고 있어요. 현재는 저장 기능이 연결되지 않았습니다.',finale:'마지막 생일 축하 공간은 아직 제작 중이에요. 네 개의 전시가 완성되면 이 문 뒤에 연결할 예정입니다.'};$('modalDescription').textContent=desc[type];$('modalStatus').textContent='이 전시물은 현재 준비 중입니다.';makeButton('전시관으로 돌아가기',closeModal)}
+function renderInvitation(){inviteOpened=false;$('invitationPhoto').classList.remove('hidden');$('invitationPhoto').src='invitation_closed.png';$('invitationPhoto').alt='금색 필기체 Invitatio가 적힌 닫힌 검은색 초대장';$('modalDescription').textContent='검은색 표지에 금색 글씨가 빛난다. 누군가 이곳에 초대장을 남겨 두었다.';$('modalActions').replaceChildren();makeButton('초대장 펼쳐 보기',()=>{inviteOpened=true;seen.add('invite');$('invitationPhoto').src='invitation_open.png';$('invitationPhoto').alt='흰색 내지가 펼쳐진 초대장';$('modalDescription').textContent='당신을 특별한 전시에 초대합니다.\n\n이곳에 준비된 작은 이야기들을 천천히 둘러봐 주세요.'; $('modalActions').replaceChildren();makeButton('다시 접기',renderInvitation);makeButton('전시관으로 돌아가기',closeModal);$('modalStatus').textContent='※ 실제 초대장 문구는 나중에 확정할 수 있어요.'})}
+function closeModal(){$('overlay').classList.add('hidden');modalType=''}document.querySelectorAll('[data-exhibit]').forEach(b=>b.addEventListener('click',()=>openExhibit(b.dataset.exhibit)));$('closeModal').addEventListener('click',closeModal);$('overlay').addEventListener('click',e=>{if(e.target===$('overlay'))closeModal()});document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('overlay').classList.contains('hidden'))closeModal()});renderStory();
+</script></body></html>
