@@ -1,4 +1,4 @@
-<!doctype html>
+!doctype html>
 <html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>주인장을 위한 비밀 전시관</title>
 <style>
@@ -39,9 +39,12 @@
 .gift-ink{opacity:0;filter:blur(4px);transition:opacity 1.5s,filter 1.5s}.gift-ink.visible{opacity:1;filter:none}
 @media(max-width:650px){.gift-stage .gift-object{border-radius:8px}.gift-object span{font-size:11px}.gift-detail{padding:17px 12px}}
 @media(prefers-reduced-motion:reduce){.gift-ink{transition:none}}
+
+/* Tavern approach sequence */
+.tavern-art{aspect-ratio:16/9;cursor:pointer}.tavern-art img{animation:none;object-fit:fill}.tavern-click{position:absolute;inset:0;width:100%;height:100%;border:0;background:transparent;cursor:pointer}.tavern-click:hover{background:#f9d89b09}.door-fade{position:absolute;inset:0;background:#09070b;opacity:0;pointer-events:none;transition:opacity .85s ease}.door-fade.active{opacity:1}.tavern-art:focus-within{outline:2px solid #ffe2a5}.tavern-art img{transition:filter .4s}.tavern-art.transitioning img{filter:brightness(.4)}
 </style></head><body>
-<section id="prologue" class="scene"><div class="eyebrow">PROLOGUE</div><div class="art"><img id="prologueImage" src="prologue.png" alt="술집으로 향하는 주인장"></div><div class="story"><p id="storyText" aria-live="polite"></p></div><div class="muted" id="storyCount"></div><div class="actions"><button class="btn" id="storyNext">다음 이야기 →</button><button class="btn" id="skipStory">창고 문으로 건너뛰기</button></div></section>
-<section id="tavern" class="scene hidden"><div class="eyebrow">THE WIND & HEARTH TAVERN</div><h1>익숙한 술집, 낯선 문</h1><p style="text-align:center;line-height:1.8">술집 안쪽에 오래된 창고 문이 보인다.<br>원래 이런 문이 있었던가?</p><div class="door-label">창고</div><div class="door-frame" id="doorFrame" role="button" tabindex="0" aria-label="창고 문 열기"><div class="door" id="door"><div class="knob"></div></div></div><p class="muted" id="doorMessage">문을 클릭해 보세요.</p><button class="btn" id="backStory">프롤로그로 돌아가기</button></section>
+<section id="prologue" class="scene"><div class="eyebrow">PROLOGUE</div><div class="art"><img id="prologueImage" src="prologue.png" alt="술집으로 향하는 주인장"></div><div class="story"><p id="storyText" aria-live="polite"></p></div><div class="muted" id="storyCount"></div><div class="actions"><button class="btn" id="storyNext">다음 이야기 →</button><button class="btn" id="skipStory">술집 내부로 건너뛰기</button></div></section>
+<section id="tavern" class="scene hidden"><div class="eyebrow">THE WIND & HEARTH TAVERN</div><h1 id="tavernTitle">익숙한 술집</h1><div class="art tavern-art"><img id="tavernImage" src="prologue4.png" alt="익숙한 술집 내부, 오른쪽 안쪽에 나무 문이 보인다"><button class="tavern-click" id="tavernClick" aria-label="안쪽 창고 문으로 다가가기"></button><div id="doorFade" class="door-fade" aria-hidden="true"></div></div><div class="story"><p id="tavernText">익숙한 술집 안쪽에, 낯선 문이 하나 보인다.\n저런 문이 원래 있었던가?</p></div><div class="actions"><button class="btn" id="tavernNext">안쪽 문으로 다가가기 →</button><button class="btn" id="backStory">프롤로그로 돌아가기</button></div></section>
 <section id="museum" class="scene hidden"><div class="eyebrow">SECRET BIRTHDAY EXHIBITION</div><h1 style="margin:0;font-size:clamp(20px,4vw,32px)">비밀 전시관</h1><div class="museum-frame"><img src="museum.png" alt="흰색 대리석과 검은색 장식이 어우러진 비밀 전시관, 네 개의 전시대와 정면 문"><button class="hotspot invite" data-exhibit="invite"><span class="symbol">✉</span><span>① 초대장</span><small>가까운 왼쪽</small></button><button class="hotspot gift" data-exhibit="gift"><span class="symbol">🎁</span><span>② 선물 상자</span><small>가까운 오른쪽</small></button><button class="hotspot hourglass" data-exhibit="hourglass"><span class="symbol">⌛</span><span>③ 모래시계</span><small>안쪽 왼쪽</small></button><button class="hotspot guestbook" data-exhibit="guestbook"><span class="symbol">📖</span><span>④ 방명록</span><small>안쪽 오른쪽</small></button><button class="hotspot finale" data-exhibit="finale"><span class="symbol">✦</span><span>마지막 문</span></button></div><div class="museum-caption">전시대를 눌러 살펴보세요. 초대장과 선물 상자를 살펴볼 수 있어요. 다른 전시물은 제작 중입니다.</div><button class="btn" id="backTavern">창고 문으로 돌아가기</button></section>
 <div class="overlay hidden" id="overlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><div class="modal"><button class="close" id="closeModal" aria-label="닫기">✕ 닫기</button><div class="badge" id="modalBadge">EXHIBIT 01</div><h2 id="modalTitle">수상한 초대장</h2><div id="invitationStage" class="invitation-stage is-closed hidden"><img id="invitationPhoto" src="invitation_closed.png" alt="검정색과 금색의 닫힌 초대장"><div id="invitationLetter" class="invitation-letter hidden" aria-label="초대장 내용"></div></div><div id="giftArea" class="hidden"></div><p id="modalDescription"></p><div class="actions" id="modalActions"></div><div class="status" id="modalStatus"></div></div></div>
 <script>
@@ -53,15 +56,24 @@ const lines=[
 {img:'prologue2.png',text:'익숙한 간판, 익숙한 불빛.\n어느새 술집의 문 앞에 도착했다.'},
 {img:'prologue3.png',text:'주인은 손을 뻗어 문고리를 잡았다.'},
 {img:'prologue3.png',text:'끼이익—\n익숙한 술집 문이 천천히 열린다.'},
-{img:'prologue3.png',text:'그런데……\n안쪽에 저런 창고 문이 있었던가?'}
+{img:'prologue4.png',text:'늘 보던 술집 안쪽 풍경이 눈앞에 펼쳐진다.'}
 ];
-// prologue4.png(술집 내부 시점)가 준비되면 마지막 두 장면의 img 값을 변경하면 됩니다.
+// prologue4.png는 술집 내부 1인칭 시점입니다.
 let storyIndex=0,opening=false,modalType='',inviteOpened=false;const seen=new Set();
 function scene(name){for(const id of scenes)$(id).classList.toggle('hidden',id!==name);window.scrollTo(0,0)}
 function renderStory(){const s=lines[storyIndex];$('prologueImage').src=s.img;$('storyText').textContent=s.text;$('storyCount').textContent=`${storyIndex+1} / ${lines.length}`;$('storyNext').textContent=storyIndex===lines.length-1?'술집 안으로 →':'다음 이야기 →'}
-$('storyNext').addEventListener('click',()=>{if(storyIndex<lines.length-1){storyIndex++;renderStory()}else scene('tavern')});$('skipStory').addEventListener('click',()=>scene('tavern'));$('backStory').addEventListener('click',()=>scene('prologue'));
-function openDoor(){if(opening)return;opening=true;$('door').classList.add('open');$('doorMessage').textContent='끼이익…… 문 너머로 낯선 빛이 번진다.';setTimeout(()=>{scene('museum');opening=false},1250)}
-$('doorFrame').addEventListener('click',openDoor);$('doorFrame').addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openDoor()}});$('backTavern').addEventListener('click',()=>{scene('tavern');$('door').classList.remove('open');$('doorMessage').textContent='문을 클릭해 보세요.'});
+$('storyNext').addEventListener('click',()=>{if(storyIndex<lines.length-1){storyIndex++;renderStory()}else {tavernStep=0;renderTavern();scene('tavern')}});$('skipStory').addEventListener('click',()=>{tavernStep=0;renderTavern();scene('tavern')});$('backStory').addEventListener('click',()=>scene('prologue'));
+let tavernStep=0,doorBusy=false;
+const tavernViews=[
+ {img:'prologue4.png',title:'익숙한 술집',text:'늘 보던 술집 안쪽 풍경이다.\n그런데 오른쪽 구석에 저런 문이 있었던가?',button:'안쪽 문으로 다가가기 →'},
+ {img:'storage_door1.png',title:'낯선 창고 문',text:'평범한 나무 문이다.\n오래된 손잡이와 낡은 나뭇결이 눈에 들어온다.',button:'조금 더 가까이 →'},
+ {img:'storage_door2.png',title:'오래된 창고 문',text:'문틈에는 먼지가 쌓여 있고, 손잡이에는 녹이 슬어 있다.\n이 문 너머에는 무엇이 있을까?',button:'문 열기 →'}
+];
+function renderTavern(){const v=tavernViews[tavernStep];$('tavernImage').src=v.img;$('tavernTitle').textContent=v.title;$('tavernText').textContent=v.text;$('tavernNext').textContent=v.button;$('tavernClick').setAttribute('aria-label',v.button)}
+function tavernAdvance(){if(doorBusy)return;if(tavernStep<2){tavernStep++;renderTavern();return}doorBusy=true;$('tavernNext').disabled=true;$('tavernText').textContent='끼이익……\n문 너머에서 낯선 빛이 번진다.';$('doorFade').classList.add('active');setTimeout(()=>{scene('museum');$('doorFade').classList.remove('active');$('tavernNext').disabled=false;doorBusy=false},950)}
+$('tavernClick').addEventListener('click',tavernAdvance);$('tavernNext').addEventListener('click',tavernAdvance);
+$('backTavern').addEventListener('click',()=>{tavernStep=2;renderTavern();scene('tavern')});
+renderTavern();
 function makeButton(label,fn){const b=document.createElement('button');b.className='btn';b.textContent=label;b.addEventListener('click',fn);$('modalActions').append(b)}
 function openExhibit(type){modalType=type;$('overlay').classList.remove('hidden');$('modalActions').replaceChildren();$('invitationStage').classList.add('hidden');$('giftArea').classList.add('hidden');$('giftArea').replaceChildren();stopInk();$('modalStatus').textContent='';const info={invite:['EXHIBIT 01','수상한 초대장'],gift:['EXHIBIT 02','주인장을 위한 선물 상자'],hourglass:['EXHIBIT 03','미래를 점치는 모래시계'],guestbook:['EXHIBIT 04','끝나지 않는 방명록'],finale:['FINALE','오늘의 주인공']};$('modalBadge').textContent=info[type][0];$('modalTitle').textContent=info[type][1];if(type==='invite'){renderInvitation();return}if(type==='gift'){renderGiftClosed();return}const desc={gift:'선물 상자와 개인 편지를 선택할 수 있는 전시를 준비하고 있어요. 실제 선물은 방송 중 직접 전달할 예정입니다.',hourglass:'장난스러운 예언과 따뜻한 응원이 담길 모래시계 전시를 준비하고 있어요.',guestbook:'방문자가 이름과 짧은 축하 메시지를 남기고, 나중에도 다시 볼 수 있는 공동 방명록을 준비하고 있어요. 현재는 저장 기능이 연결되지 않았습니다.',finale:'마지막 생일 축하 공간은 아직 제작 중이에요. 네 개의 전시가 완성되면 이 문 뒤에 연결할 예정입니다.'};$('modalDescription').textContent=desc[type];$('modalStatus').textContent='이 전시물은 현재 준비 중입니다.';makeButton('전시관으로 돌아가기',closeModal)}
 const invitationParagraphs=[
