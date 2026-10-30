@@ -5,12 +5,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>달그늘 | 이름 없는 전시관</title>
+
 <style>
 :root {
   --gold: #d9b77e;
   --cream: #f8edd9;
   --dark: #17121b;
-  --panel: #28202a;
 }
 * { box-sizing: border-box; }
 body {
@@ -22,10 +22,6 @@ body {
 button, input, textarea { font: inherit; }
 button { cursor: pointer; }
 button:disabled { opacity: .35; cursor: default; }
-button:focus-visible, input:focus-visible, textarea:focus-visible {
-  outline: 3px solid #ffe6a6;
-  outline-offset: 3px;
-}
 .hidden { display: none !important; }
 .screen {
   min-height: 100dvh;
@@ -107,7 +103,7 @@ button:focus-visible, input:focus-visible, textarea:focus-visible {
 .museum-frame {
   width: min(1200px, 100%);
   position: relative;
-  aspect-ratio: 3 / 2;
+  aspect-ratio: 1648 / 928;
   overflow: hidden;
   border: 1px solid #aa916b;
   border-radius: 10px;
@@ -116,7 +112,7 @@ button:focus-visible, input:focus-visible, textarea:focus-visible {
   display: block;
   width: 100%;
   height: 100%;
-  object-fit: fill;
+  object-fit: contain;
 }
 .hotspot {
   position: absolute;
@@ -128,7 +124,6 @@ button:focus-visible, input:focus-visible, textarea:focus-visible {
   border: 1px solid #e8c68b;
   border-radius: 9px;
   box-shadow: 0 0 20px #f1c27c55;
-  transition: .2s;
 }
 .hotspot:hover {
   background: #6c4a38;
@@ -258,10 +253,9 @@ button:focus-visible, input:focus-visible, textarea:focus-visible {
   background: transparent;
   border-radius: 12px;
 }
-.gift-object:hover, .gift-object:focus-visible {
+.gift-object:hover {
   background: #ffe4a51b;
   border-color: #ffda94;
-  box-shadow: 0 0 25px #f3c87988;
 }
 .gift-coins {
   left: 19%; top: 27%; width: 29%; height: 48%;
@@ -313,7 +307,6 @@ button:focus-visible, input:focus-visible, textarea:focus-visible {
   background: #f0e2c4;
   border: 8px solid #6b4933;
   border-radius: 12px;
-  box-shadow: inset 0 0 25px #b99b6b;
 }
 .book h3 { text-align: center; }
 .book-entry {
@@ -343,8 +336,7 @@ button:focus-visible, input:focus-visible, textarea:focus-visible {
 
 /* 마지막 공간 */
 #birthday {
-  background:
-    radial-gradient(circle at 50% 30%, #715073, #221627 65%, #100d16);
+  background: radial-gradient(circle at 50% 30%, #715073, #221627 65%, #100d16);
   text-align: center;
 }
 .birthday-card {
@@ -379,10 +371,6 @@ button:focus-visible, input:focus-visible, textarea:focus-visible {
   .letter-paper p { font-size: 12px; line-height: 1.7; }
   .modal { padding: 12px; }
 }
-@media (prefers-reduced-motion: reduce) {
-  .scene-art img, .hourglass-symbol { animation: none; }
-  .ink { transition: none; }
-}
 </style>
 </head>
 
@@ -393,7 +381,7 @@ button:focus-visible, input:focus-visible, textarea:focus-visible {
   <div class="eyebrow">DALGEUNEUL · PROLOGUE</div>
 
   <div class="scene-art">
-    <img id="sceneImage" src="prologue.png" alt="오두막 침실">
+    <img id="sceneImage" src="prologue_01.png" alt="오두막 침실">
   </div>
 
   <div class="dialogue" id="dialogue"></div>
@@ -476,8 +464,7 @@ button:focus-visible, input:focus-visible, textarea:focus-visible {
     <button class="close" id="closeModal">✕ 닫기</button>
     <div class="eyebrow" id="modalBadge"></div>
     <h2 id="modalTitle"></h2>
-    <div id="modalContent" style="width:100%;display:flex;
-      flex-direction:column;align-items:center;gap:15px"></div>
+    <div id="modalContent" style="width:100%;display:flex;flex-direction:column;align-items:center;gap:15px"></div>
     <div class="actions" id="modalActions"></div>
     <div class="muted" id="modalStatus"></div>
   </div>
@@ -528,7 +515,7 @@ const prologueScenes = [
   },
   {
     image: "prologue_06.png",
-    alt: "창고 문을 향해 다가가는 모습",
+    alt: "창고 문으로 이동",
     text: "무심코 안쪽으로 발걸음을 옮겼다.\n" +
           "초록색 좌석 옆, 오래된 나무문 하나가 눈에 들어온다.\n" +
           "분명 익숙한 곳인데, 어쩐지 낯설다."
@@ -620,16 +607,14 @@ function addParagraph(text) {
   const p = document.createElement("p");
   p.textContent = text;
   $("modalContent").append(p);
-  return p;
 }
 
-function addImage(filename, alt, className = "modal-image") {
+function addImage(filename, alt) {
   const img = document.createElement("img");
   img.src = filename;
   img.alt = alt;
-  img.className = className;
+  img.className = "modal-image";
   $("modalContent").append(img);
-  return img;
 }
 
 function openExhibit(type) {
@@ -663,7 +648,6 @@ document.querySelectorAll("[data-exhibit]").forEach(button => {
 });
 
 $("closeModal").onclick = closeModal;
-
 $("overlay").onclick = event => {
   if (event.target === $("overlay")) closeModal();
 };
@@ -675,7 +659,6 @@ document.addEventListener("keydown", event => {
   }
   if (!$("overlay").classList.contains("hidden")) return;
   if ($("prologue").classList.contains("hidden")) return;
-
   if (event.key === "ArrowRight") $("nextScene").click();
   if (event.key === "ArrowLeft") $("prevScene").click();
 });
@@ -796,6 +779,7 @@ function renderGiftOpen() {
 
 function renderGiftCoins() {
   clearModal();
+
   const card = document.createElement("div");
   card.className = "gift-detail";
 
@@ -847,7 +831,7 @@ function renderGiftLetter() {
   addButton("상자로 돌아가기", renderGiftOpen);
 }
 
-/* 모래시계 */
+/* 운세 모래시계 */
 
 const fortunes = [
   "대길!\n오늘은 좋은 일이 찾아올 운세입니다.\n단, 침대에서 일어나는 데에는 별도의 의지가 필요합니다.",
@@ -881,18 +865,16 @@ function drawFortune() {
 
   const paper = document.createElement("div");
   paper.className = "fortune-paper";
-
   const index = Math.floor(Math.random() * fortunes.length);
   paper.textContent = fortunes[index];
 
   $("modalContent").append(paper);
-
   addButton("다시 뽑기", drawFortune);
   addButton("모래시계로 돌아가기", renderHourglass);
   addButton("전시관으로 돌아가기", closeModal);
 }
 
-/* 방명록: 이 브라우저에만 저장 */
+/* 방명록 */
 
 const GUEST_KEY = "dalgeuneul_guestbook_v1";
 const PAGE_SIZE = 12;
@@ -920,7 +902,7 @@ function renderGuestbook() {
 
   const entries = getEntries();
   const pages = Math.max(1, Math.ceil(entries.length / PAGE_SIZE));
-  guestPage = Math.min(guestPage, pages - 1);
+  guestPage = Math.max(0, Math.min(guestPage, pages - 1));
 
   const book = document.createElement("div");
   book.className = "book";
@@ -1006,12 +988,10 @@ function renderGuestForm() {
   name.placeholder = "이름 (최대 12자, 필수)";
   name.maxLength = 12;
   name.required = true;
-  name.setAttribute("aria-label", "이름");
 
   const message = document.createElement("textarea");
   message.placeholder = "메시지 (최대 50자, 선택)";
   message.maxLength = 50;
-  message.setAttribute("aria-label", "메시지");
 
   const submit = document.createElement("button");
   submit.className = "btn";
