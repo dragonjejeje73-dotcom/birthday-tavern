@@ -201,6 +201,15 @@ button { cursor: pointer; }
   object-fit: contain;
 }
 
+.clickable-art {
+  cursor: pointer;
+  transition: transform .2s ease;
+}
+
+.clickable-art:hover {
+  transform: scale(1.04);
+}
+
 .paper {
   background: #f4e6c7;
   color: #4a3528;
@@ -324,6 +333,7 @@ button { cursor: pointer; }
   justify-content: center;
   text-align: center;
   padding: 30px;
+  gap: 18px;
   background: radial-gradient(circle at 50% 30%, #6d4b65, #23172c 70%);
 }
 
@@ -340,6 +350,18 @@ button { cursor: pointer; }
 
 .cake {
   font-size: clamp(90px, 13vw, 160px);
+}
+
+.birthday-envelope {
+  width: min(310px, 75%);
+  max-height: 230px;
+  object-fit: contain;
+  cursor: pointer;
+  transition: transform .2s ease;
+}
+
+.birthday-envelope:hover {
+  transform: scale(1.05);
 }
 
 .birthday-letter {
@@ -676,6 +698,7 @@ function addArt(src, alt) {
   img.src = src;
   img.alt = alt;
   $("modalContent").append(img);
+  return img;
 }
 
 function addText(text) {
@@ -727,17 +750,20 @@ const invitation = `친애하는 주인장께.
 function showInvitation(open) {
   openModal("EXHIBIT 01 · 비밀 초대장");
 
-  addArt(
+  const art = addArt(
     open ? "invitation_open.png" : "invitation_closed.png",
     "초대장"
   );
+
+  art.classList.add("clickable-art");
+  art.addEventListener("click", () => showInvitation(!open));
 
   if (open) {
     $("modalContent").append(
       node("div", "paper", invitation)
     );
   } else {
-    addText("당신을 기다리고 있던 초대장이다.");
+    addText("당신을 기다리고 있던 초대장이다.\n초대장을 클릭해 펼쳐 보자.");
   }
 
   addButton(
@@ -748,9 +774,9 @@ function showInvitation(open) {
   addButton("전시관으로 돌아가기", closeModal);
 }
 
-/* 선물 */
+/* 선물 상자 — 이미지 클릭 */
 
-function showGift(step) {
+function showGift(step = 0) {
   openModal("EXHIBIT 02 · 작은 선물");
 
   const images = [
@@ -759,21 +785,39 @@ function showGift(step) {
     "gift_contents.png"
   ];
 
-  addArt(images[step], "선물 상자");
+  const descriptions = [
+    "당신 앞으로 놓인 작은 선물 상자다.\n상자를 클릭해 열어 보자.",
+    "상자가 열렸다!\n안쪽을 클릭해서 선물을 확인해 보자.",
+    "짜잔! 당신을 위해 준비한 선물이다."
+  ];
 
-  addText([
-    "당신 앞으로 놓인 작은 선물 상자다.",
-    "상자가 열렸다. 안쪽에 무언가 더 보인다.",
-    "반짝이는 선물이 당신을 기다리고 있다."
-  ][step]);
+  const art = addArt(images[step], descriptions[step]);
 
-  if (step < 2) {
-    addButton(
-      step === 0 ? "상자 열기" : "선물 살펴보기",
-      () => showGift(step + 1)
-    );
+  art.classList.add("clickable-art");
+  art.tabIndex = 0;
+  art.setAttribute("role", "button");
+
+  function nextGift() {
+    showGift((step + 1) % 3);
+  }
+
+  art.addEventListener("click", nextGift);
+
+  art.addEventListener("keydown", e => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      nextGift();
+    }
+  });
+
+  addText(descriptions[step]);
+
+  if (step === 0) {
+    addButton("🎁 상자 열기", () => showGift(1));
+  } else if (step === 1) {
+    addButton("✨ 선물 확인하기", () => showGift(2));
   } else {
-    addButton("다시 살펴보기", () => showGift(0));
+    addButton("↻ 다시 보기", () => showGift(0));
   }
 
   addButton("전시관으로 돌아가기", closeModal);
@@ -1177,43 +1221,9 @@ function showFinalDoor() {
   password.focus();
 }
 
-/* 마지막 케이크와 편지 */
+/* 마지막 케이크 + 초대장처럼 펼쳐지는 편지 */
 
-function renderBirthday() {
-  screen = "birthday";
-  app.replaceChildren();
-
-  const stage = node("main", "stage");
-
-  stage.style.overflowY = "auto";
-  stage.style.maxHeight = "100dvh";
-
-  const content = node("div", "birthday");
-  content.style.minHeight = "100%";
-  content.style.height = "auto";
-  content.style.gap = "18px";
-
-  const cake = node("div", "cake", "🎂");
-  cake.style.cursor = "pointer";
-  cake.title = "케이크를 클릭해 보세요";
-
-  const title = node(
-    "h1",
-    "",
-    "생일 축하해, 우렌모!"
-  );
-
-  const hint = node(
-    "p",
-    "",
-    "마지막으로 준비한 선물이 하나 더 있어.\n" +
-    "케이크를 눌러 봐."
-  );
-
-  const letter = node(
-    "div",
-    "paper birthday-letter",
-    `우렌모에게
+const birthdayLetter = `우렌모에게
 어땠었어 내가 만든거?
 나름 잘 만들었을지 모르겠네 ㅋㅋ
 너 생일이라고 해서 축하해주고 싶은데 어떻게 해야 해서 이렇게라도 만들어봐
@@ -1223,43 +1233,100 @@ function renderBirthday() {
 너를 자꾸 기다리는 내 시간이 정말 기다림의 연속이 되는거 같아.
 너의 삶에서 오늘의 생일이 어떻게 기록될지 모르겠지만
 너에게 가장 행복한 하루였으면 좋겠어
-사랑하고 또 사랑해 바보야.`
+사랑하고 또 사랑해 바보야.`;
+
+function renderBirthday(letterOpen = false) {
+  screen = "birthday";
+  app.replaceChildren();
+
+  const stage = node("main", "stage");
+  stage.style.overflowY = "auto";
+  stage.style.maxHeight = "100dvh";
+
+  const content = node("div", "birthday");
+  content.style.minHeight = "100%";
+  content.style.height = "auto";
+
+  const cake = node("div", "cake", "🎂");
+
+  const title = node(
+    "h1",
+    "",
+    "생일 축하해, 우렌모!"
   );
 
-  letter.hidden = true;
+  const guide = node(
+    "p",
+    "",
+    letterOpen
+      ? "당신에게 전하는 마지막 편지입니다."
+      : "마지막으로 준비한 선물이 하나 더 있어.\n아래 편지를 눌러 봐."
+  );
 
-  function revealLetter() {
-    letter.hidden = false;
-    hint.hidden = true;
-    cake.style.cursor = "default";
+  const envelope = node("img", "birthday-envelope");
 
-    cake.removeEventListener("click", revealLetter);
+  envelope.src = letterOpen
+    ? "invitation_open.png"
+    : "invitation_closed.png";
 
-    setTimeout(() => {
-      letter.scrollIntoView({
-        behavior: "smooth",
-        block: "center"
-      });
-    }, 100);
+  envelope.alt = letterOpen
+    ? "펼쳐진 생일 편지"
+    : "닫힌 생일 편지";
+
+  envelope.tabIndex = 0;
+  envelope.setAttribute("role", "button");
+
+  function toggleLetter() {
+    renderBirthday(!letterOpen);
   }
 
-  cake.addEventListener("click", revealLetter);
+  envelope.addEventListener("click", toggleLetter);
 
-  const backButton = btn(
-    "전시관으로 돌아가기",
-    renderGallery
+  envelope.addEventListener("keydown", e => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      toggleLetter();
+    }
+  });
+
+  content.append(cake, title, guide, envelope);
+
+  if (letterOpen) {
+    const letter = node(
+      "div",
+      "paper birthday-letter",
+      birthdayLetter
+    );
+
+    content.append(letter);
+  }
+
+  content.append(
+    btn(
+      letterOpen ? "✉ 편지 접기" : "✉ 편지 펼치기",
+      toggleLetter
+    )
   );
 
   content.append(
-    cake,
-    title,
-    hint,
-    letter,
-    backButton
+    btn("전시관으로 돌아가기", renderGallery)
   );
 
   stage.append(content);
   app.append(stage);
+
+  if (letterOpen) {
+    const letter = content.querySelector(".birthday-letter");
+
+    if (letter) {
+      requestAnimationFrame(() => {
+        letter.scrollIntoView({
+          behavior: "smooth",
+          block: "center"
+        });
+      });
+    }
+  }
 }
 
 /* 사이트 시작 */
