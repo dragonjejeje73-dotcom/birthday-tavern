@@ -5,66 +5,377 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>달그늘 — 이름 없는 전시관</title>
+
 <style>
-:root{--gold:#d8b77e;--cream:#f4e7cd;--night:#140f1d}
-*{box-sizing:border-box}
-body{margin:0;background:var(--night);color:var(--cream);font-family:"Malgun Gothic",sans-serif}
-[hidden]{display:none!important}
-button,input,textarea{font:inherit}
-button{cursor:pointer}
-#app{min-height:100dvh;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle,#382a39,#100d16)}
-.stage{position:relative;width:min(100vw,1500px);aspect-ratio:16/9;max-height:100dvh;overflow:hidden;background:#18121c}
-.scene-img{width:100%;height:100%;object-fit:cover;display:block}
-.shade{position:absolute;inset:0;background:linear-gradient(transparent 45%,#0c0816d9);pointer-events:none}
-.dialogue{position:absolute;left:5%;right:5%;bottom:4%;background:#130e1de8;border:1px solid #b99a6a;border-radius:12px;padding:18px 24px;min-height:125px;cursor:pointer}
-.dialogue p{margin:0;white-space:pre-line;line-height:1.85;font-size:clamp(14px,1.5vw,20px)}
-.hint{display:block;text-align:right;font-size:12px;color:#c7b69a;margin-top:8px}
-.hotspot{position:absolute;transform:translate(-50%,-50%);border:1px solid #f4d99e;background:#1a1029e8;color:#fff0c9;padding:10px 13px;border-radius:20px;box-shadow:0 0 18px #ffdc7d88;white-space:nowrap;font-size:clamp(11px,1.2vw,16px)}
-.hotspot:hover{transform:translate(-50%,-50%) scale(1.08);background:#483057}
-.topbar{position:absolute;top:12px;left:12px;right:12px;display:flex;justify-content:space-between}
-.pill,.action{border:1px solid #cda975;background:#25182d;color:#ffe8bb;border-radius:8px;padding:10px 16px}
-.pill:hover,.action:hover{background:#48304c}
-.action:disabled{opacity:.5;cursor:wait}
-.gallery-title{position:absolute;top:12px;left:50%;transform:translateX(-50%);padding:8px 16px;background:#160e20c9;border:1px solid var(--gold);border-radius:30px;white-space:nowrap}
-.modal-backdrop{position:fixed;inset:0;z-index:20;background:#090611e8;display:flex;align-items:center;justify-content:center;padding:16px}
-.modal{width:min(760px,100%);max-height:94dvh;overflow-y:auto;background:linear-gradient(150deg,#302039,#1a1223);border:2px solid var(--gold);border-radius:15px;padding:22px;position:relative;text-align:center}
-.modal h2{margin:4px 40px 16px;color:#f4d8a2}
-.modal-close{position:absolute;top:12px;right:12px;border:0;background:none;color:white;font-size:28px}
-.modal-content{display:flex;flex-direction:column;align-items:center;gap:16px;line-height:1.8}
-.modal-content p{margin:4px 0;white-space:pre-line}
-.actions{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:20px}
-.art{width:min(480px,100%);max-height:42dvh;object-fit:contain}
-.paper{background:#f4e6c7;color:#4a3528;padding:24px;text-align:left;border:4px double #aa895c;border-radius:7px;white-space:pre-line;line-height:2;width:100%;font-family:Georgia,"Malgun Gothic",serif;animation:ink 1.3s ease both}
-@keyframes ink{from{opacity:0;filter:blur(5px)}to{opacity:1;filter:blur(0)}}
-.tarot-deck{display:flex;justify-content:center;flex-wrap:wrap;gap:12px;width:100%;padding:16px 0}
-.tarot-card{width:clamp(76px,15vw,116px);aspect-ratio:2/3;border:3px double var(--gold);border-radius:9px;color:#e9ce99;background:radial-gradient(circle,#574171,#24172e 75%);box-shadow:0 8px 24px #0008;position:relative;transition:transform .2s}
-.tarot-card::before{content:"☾ ✦ ☽";position:absolute;inset:7px;border:1px solid #b99a64;border-radius:5px;display:grid;place-items:center;font-size:21px}
-.tarot-card:hover{transform:translateY(-10px)}
-.tarot-reveal{width:min(290px,100%);min-height:310px;border:5px double var(--gold);border-radius:12px;background:radial-gradient(circle,#56416d,#1f162b 80%);display:flex;flex-direction:column;justify-content:center;align-items:center;gap:12px;padding:20px;animation:flip .6s ease}
-.tarot-symbol{font-size:70px}
-.tarot-english{font:14px Georgia,serif;letter-spacing:2px;color:#ead2a0}
-@keyframes flip{from{opacity:0;transform:rotateY(85deg)}to{opacity:1;transform:rotateY(0)}}
-.tarot-result{width:min(620px,100%);background:#f4e6c7;color:#493428;border:3px double #aa895c;border-radius:8px;padding:24px;line-height:2;white-space:pre-line}
-.field{width:100%;padding:12px;border-radius:7px;border:1px solid #b99a64;background:#f8efdc;color:#3a2922}
-.guest-entry{width:100%;text-align:left;background:#2a2030;border:1px solid #6f5973;border-radius:8px;padding:12px;margin:8px 0;overflow-wrap:anywhere}
-.guest-entry small{color:#c6aa81}
-.guest-list{width:100%}
-.birthday{min-height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:30px;background:radial-gradient(circle at 50% 30%,#6d4b65,#23172c 70%)}
-.birthday h1{font-size:clamp(30px,5vw,72px);color:#ffe0a7}
-.birthday p{line-height:2;max-width:650px;white-space:pre-line}
-.cake{font-size:clamp(90px,13vw,160px)}
-.sparkle{position:absolute;inset:0;pointer-events:none;background-image:radial-gradient(#ffdfac 1px,transparent 1px);background-size:55px 63px;opacity:.35}
-@media(max-width:600px){
-.stage{aspect-ratio:9/16;max-height:100dvh}
-.dialogue{left:3%;right:3%;bottom:3%;padding:13px;min-height:145px}
-.modal{padding:15px}
-.hotspot{font-size:11px;padding:7px}
-.gallery-title{top:55px}
-.tarot-deck{gap:7px}
-.tarot-card{width:17%}
+:root {
+  --gold: #d8b77e;
+  --cream: #f4e7cd;
+  --night: #140f1d;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--night);
+  color: var(--cream);
+  font-family: "Malgun Gothic", sans-serif;
+}
+
+[hidden] { display: none !important; }
+
+button, input, textarea { font: inherit; }
+button { cursor: pointer; }
+
+#app {
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle, #382a39, #100d16);
+}
+
+.stage {
+  position: relative;
+  width: min(100vw, 1500px);
+  aspect-ratio: 16 / 9;
+  max-height: 100dvh;
+  overflow: hidden;
+  background: #18121c;
+}
+
+.scene-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(transparent 45%, #0c0816d9);
+  pointer-events: none;
+}
+
+.dialogue {
+  position: absolute;
+  left: 5%;
+  right: 5%;
+  bottom: 4%;
+  background: #130e1de8;
+  border: 1px solid #b99a6a;
+  border-radius: 12px;
+  padding: 18px 24px;
+  min-height: 125px;
+  cursor: pointer;
+}
+
+.dialogue p {
+  margin: 0;
+  white-space: pre-line;
+  line-height: 1.85;
+  font-size: clamp(14px, 1.5vw, 20px);
+}
+
+.hint {
+  display: block;
+  text-align: right;
+  font-size: 12px;
+  color: #c7b69a;
+  margin-top: 8px;
+}
+
+.hotspot {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  border: 1px solid #f4d99e;
+  background: #1a1029e8;
+  color: #fff0c9;
+  padding: 10px 13px;
+  border-radius: 20px;
+  box-shadow: 0 0 18px #ffdc7d88;
+  white-space: nowrap;
+  font-size: clamp(11px, 1.2vw, 16px);
+}
+
+.hotspot:hover {
+  transform: translate(-50%, -50%) scale(1.08);
+  background: #483057;
+}
+
+.topbar {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  right: 12px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.pill, .action {
+  border: 1px solid #cda975;
+  background: #25182d;
+  color: #ffe8bb;
+  border-radius: 8px;
+  padding: 10px 16px;
+}
+
+.pill:hover, .action:hover { background: #48304c; }
+.action:disabled { opacity: .5; cursor: wait; }
+
+.gallery-title {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 8px 16px;
+  background: #160e20c9;
+  border: 1px solid var(--gold);
+  border-radius: 30px;
+  white-space: nowrap;
+}
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  background: #090611e8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+.modal {
+  width: min(760px, 100%);
+  max-height: 94dvh;
+  overflow-y: auto;
+  background: linear-gradient(150deg, #302039, #1a1223);
+  border: 2px solid var(--gold);
+  border-radius: 15px;
+  padding: 22px;
+  position: relative;
+  text-align: center;
+}
+
+.modal h2 {
+  margin: 4px 40px 16px;
+  color: #f4d8a2;
+}
+
+.modal-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  border: 0;
+  background: none;
+  color: white;
+  font-size: 28px;
+}
+
+.modal-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  line-height: 1.8;
+}
+
+.modal-content p {
+  margin: 4px 0;
+  white-space: pre-line;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.art {
+  width: min(480px, 100%);
+  max-height: 42dvh;
+  object-fit: contain;
+}
+
+.paper {
+  background: #f4e6c7;
+  color: #4a3528;
+  padding: 24px;
+  text-align: left;
+  border: 4px double #aa895c;
+  border-radius: 7px;
+  white-space: pre-line;
+  line-height: 2;
+  width: 100%;
+  font-family: Georgia, "Malgun Gothic", serif;
+  animation: ink 1.3s ease both;
+}
+
+@keyframes ink {
+  from { opacity: 0; filter: blur(5px); }
+  to { opacity: 1; filter: blur(0); }
+}
+
+.tarot-deck {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  width: 100%;
+  padding: 16px 0;
+}
+
+.tarot-card {
+  width: clamp(76px, 15vw, 116px);
+  aspect-ratio: 2 / 3;
+  border: 3px double var(--gold);
+  border-radius: 9px;
+  color: #e9ce99;
+  background: radial-gradient(circle, #574171, #24172e 75%);
+  box-shadow: 0 8px 24px #0008;
+  position: relative;
+  transition: transform .2s;
+}
+
+.tarot-card::before {
+  content: "☾ ✦ ☽";
+  position: absolute;
+  inset: 7px;
+  border: 1px solid #b99a64;
+  border-radius: 5px;
+  display: grid;
+  place-items: center;
+  font-size: 21px;
+}
+
+.tarot-card:hover { transform: translateY(-10px); }
+
+.tarot-reveal {
+  width: min(290px, 100%);
+  min-height: 310px;
+  border: 5px double var(--gold);
+  border-radius: 12px;
+  background: radial-gradient(circle, #56416d, #1f162b 80%);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  padding: 20px;
+  animation: flip .6s ease;
+}
+
+.tarot-symbol { font-size: 70px; }
+
+.tarot-english {
+  font: 14px Georgia, serif;
+  letter-spacing: 2px;
+  color: #ead2a0;
+}
+
+@keyframes flip {
+  from { opacity: 0; transform: rotateY(85deg); }
+  to { opacity: 1; transform: rotateY(0); }
+}
+
+.tarot-result {
+  width: min(620px, 100%);
+  background: #f4e6c7;
+  color: #493428;
+  border: 3px double #aa895c;
+  border-radius: 8px;
+  padding: 24px;
+  line-height: 2;
+  white-space: pre-line;
+}
+
+.field {
+  width: 100%;
+  padding: 12px;
+  border-radius: 7px;
+  border: 1px solid #b99a64;
+  background: #f8efdc;
+  color: #3a2922;
+}
+
+.guest-entry {
+  width: 100%;
+  text-align: left;
+  background: #2a2030;
+  border: 1px solid #6f5973;
+  border-radius: 8px;
+  padding: 12px;
+  margin: 8px 0;
+  overflow-wrap: anywhere;
+}
+
+.guest-entry small { color: #c6aa81; }
+.guest-list { width: 100%; }
+
+.birthday {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 30px;
+  background: radial-gradient(circle at 50% 30%, #6d4b65, #23172c 70%);
+}
+
+.birthday h1 {
+  font-size: clamp(30px, 5vw, 72px);
+  color: #ffe0a7;
+}
+
+.birthday p {
+  line-height: 2;
+  max-width: 650px;
+  white-space: pre-line;
+}
+
+.cake {
+  font-size: clamp(90px, 13vw, 160px);
+}
+
+.birthday-letter {
+  max-width: 650px;
+  margin: 12px auto;
+  text-align: left;
+}
+
+@media (max-width: 600px) {
+  .stage {
+    aspect-ratio: 9 / 16;
+    max-height: 100dvh;
+  }
+
+  .dialogue {
+    left: 3%;
+    right: 3%;
+    bottom: 3%;
+    padding: 13px;
+    min-height: 145px;
+  }
+
+  .modal { padding: 15px; }
+
+  .hotspot {
+    font-size: 11px;
+    padding: 7px;
+  }
+
+  .gallery-title { top: 55px; }
+  .tarot-deck { gap: 7px; }
+  .tarot-card { width: 17%; }
 }
 </style>
 </head>
+
 <body>
 
 <div id="app"></div>
@@ -79,6 +390,9 @@ button{cursor:pointer}
 </div>
 
 <script type="module">
+
+/* Firebase 연결 */
+
 import { initializeApp } from
 "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
 
@@ -94,8 +408,6 @@ import {
 } from
 "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
 
-/* Firebase 설정 */
-
 const firebaseConfig = {
   apiKey: "AIzaSyAmWVCV9ULWPsBaz4wTKw-DJG7Xk16BeFw",
   authDomain: "birthday-tavern.firebaseapp.com",
@@ -109,6 +421,8 @@ const firebaseConfig = {
 const firebaseApp = initializeApp(firebaseConfig);
 const db = getFirestore(firebaseApp);
 const guestbookRef = collection(db, "guestbook");
+
+/* 기본 함수 */
 
 const $ = id => document.getElementById(id);
 const app = $("app");
@@ -194,18 +508,20 @@ let screen = "prologue";
 
 function renderScene() {
   screen = "prologue";
-  const scene = scenes[sceneIndex];
 
+  const scene = scenes[sceneIndex];
   app.replaceChildren();
 
   const stage = node("main", "stage");
   const img = node("img", "scene-img");
+
   img.src = scene.image;
   img.alt = "달그늘로 향하는 풍경";
 
   stage.append(img, node("div", "shade"));
 
   const topbar = node("div", "topbar");
+
   topbar.append(
     btn("처음부터", () => {
       sceneIndex = 0;
@@ -232,6 +548,7 @@ function renderScene() {
   );
 
   dialogue.addEventListener("click", advance);
+
   dialogue.addEventListener("keydown", e => {
     if (e.key === "Enter" || e.key === " ") {
       e.preventDefault();
@@ -276,6 +593,7 @@ function renderGallery() {
 
   const stage = node("main", "stage");
   const img = node("img", "scene-img");
+
   img.src = "museum.png";
   img.alt = "비밀 전시관";
 
@@ -293,10 +611,12 @@ function renderGallery() {
 
     hotspot.style.left = item.x + "%";
     hotspot.style.top = item.y + "%";
+
     stage.append(hotspot);
   }
 
   const topbar = node("div", "topbar");
+
   topbar.append(
     btn("← 술집으로", () => {
       sceneIndex = 6;
@@ -327,6 +647,7 @@ function openModal(title) {
   $("modalContent").replaceChildren();
   $("modalActions").replaceChildren();
   $("modalBackdrop").hidden = false;
+
   document.body.style.overflow = "hidden";
 }
 
@@ -572,6 +893,7 @@ function drawCard() {
 
   const n = Math.floor(Math.random() * remainingCards.length);
   const index = remainingCards.splice(n, 1)[0];
+
   return tarotCards[index];
 }
 
@@ -721,13 +1043,13 @@ function showGuestbook() {
   );
 
   const list = node("div", "guest-list");
+
   list.append(
     node("p", "", "축하 메시지를 불러오는 중...")
   );
 
   $("modalContent").append(list);
 
-  // 다른 방문자가 새 글을 남겨도 자동으로 목록 갱신
   const messagesQuery = query(
     guestbookRef,
     orderBy("createdAt", "desc"),
@@ -799,55 +1121,148 @@ function showGuestbook() {
   addButton("전시관으로 돌아가기", closeModal);
 }
 
-/* 마지막 문 */
+/* 마지막 문 — 비밀번호 */
 
 function showFinalDoor() {
-  openModal("마지막 문");
+  openModal("마지막 문 · 비밀의 자물쇠");
 
-  addText("전시관의 마지막 문이 조용히 빛나고 있다.");
   addText(
-    "이 문을 열면 오늘을 위해 준비한 마지막 이야기가 시작된다."
+    "전시관의 마지막 문 앞에 도착했다.\n" +
+    "문에는 작은 자물쇠가 걸려 있다.\n\n" +
+    "✦ 비밀번호를 알아야 문을 열 수 있습니다."
   );
 
-  addButton("문 열기", () => {
-    closeModal();
-    renderBirthday();
+  const hint = node(
+    "p",
+    "",
+    "🔑 힌트 : 주인장의 이름과 생일"
+  );
+
+  hint.style.color = "#f4d8a2";
+  $("modalContent").append(hint);
+
+  const password = node("input", "field");
+  password.type = "password";
+  password.placeholder = "비밀번호를 입력하세요";
+  password.autocomplete = "off";
+  password.maxLength = 50;
+
+  $("modalContent").append(password);
+
+  const feedback = node("p", "", "");
+  feedback.style.color = "#ffb6b6";
+
+  $("modalContent").append(feedback);
+
+  function unlock() {
+    if (password.value === "Mouren1030") {
+      closeModal();
+      renderBirthday();
+    } else {
+      feedback.textContent =
+        "🔒 비밀번호가 틀렸습니다. 힌트를 다시 확인해 주세요.";
+
+      password.value = "";
+      password.focus();
+    }
+  }
+
+  password.addEventListener("keydown", e => {
+    if (e.key === "Enter") unlock();
   });
 
-  addButton("조금 더 둘러보기", closeModal);
+  addButton("🔓 문 열기", unlock);
+  addButton("전시관으로 돌아가기", closeModal);
+
+  password.focus();
 }
 
-/* 생일 축하 */
+/* 마지막 케이크와 편지 */
 
 function renderBirthday() {
   screen = "birthday";
   app.replaceChildren();
 
   const stage = node("main", "stage");
-  const content = node("div", "birthday");
 
-  content.append(
-    node("div", "sparkle"),
-    node("div", "cake", "🎂"),
-    node("h1", "", "생일 축하합니다!"),
-    node(
-      "p",
-      "",
-      "오늘만큼은 달그늘의 주인장도 특별한 손님입니다.\n" +
-      "이 작은 전시관이 즐거운 추억으로 남기를 바랍니다.\n" +
-      "앞으로도 웃음 가득한 날들이 이어지기를!"
-    )
+  stage.style.overflowY = "auto";
+  stage.style.maxHeight = "100dvh";
+
+  const content = node("div", "birthday");
+  content.style.minHeight = "100%";
+  content.style.height = "auto";
+  content.style.gap = "18px";
+
+  const cake = node("div", "cake", "🎂");
+  cake.style.cursor = "pointer";
+  cake.title = "케이크를 클릭해 보세요";
+
+  const title = node(
+    "h1",
+    "",
+    "생일 축하해, 우렌모!"
+  );
+
+  const hint = node(
+    "p",
+    "",
+    "마지막으로 준비한 선물이 하나 더 있어.\n" +
+    "케이크를 눌러 봐."
+  );
+
+  const letter = node(
+    "div",
+    "paper birthday-letter",
+    `우렌모에게
+어땠었어 내가 만든거?
+나름 잘 만들었을지 모르겠네 ㅋㅋ
+너 생일이라고 해서 축하해주고 싶은데 어떻게 해야 해서 이렇게라도 만들어봐
+생일 축하하고 바보야.
+너 덕분에 방송보는 그 하루가 너무 재밌는거 같아.
+너와 같이 얘기하면서 노는 그 시간이 좋았고
+너를 자꾸 기다리는 내 시간이 정말 기다림의 연속이 되는거 같아.
+너의 삶에서 오늘의 생일이 어떻게 기록될지 모르겠지만
+너에게 가장 행복한 하루였으면 좋겠어
+사랑하고 또 사랑해 바보야.`
+  );
+
+  letter.hidden = true;
+
+  function revealLetter() {
+    letter.hidden = false;
+    hint.hidden = true;
+    cake.style.cursor = "default";
+
+    cake.removeEventListener("click", revealLetter);
+
+    setTimeout(() => {
+      letter.scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+      });
+    }, 100);
+  }
+
+  cake.addEventListener("click", revealLetter);
+
+  const backButton = btn(
+    "전시관으로 돌아가기",
+    renderGallery
   );
 
   content.append(
-    btn("전시관으로 돌아가기", renderGallery)
+    cake,
+    title,
+    hint,
+    letter,
+    backButton
   );
 
   stage.append(content);
   app.append(stage);
 }
 
-/* 시작 */
+/* 사이트 시작 */
 
 renderScene();
 
