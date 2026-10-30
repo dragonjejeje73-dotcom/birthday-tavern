@@ -4,1034 +4,1070 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>달그늘 | 이름 없는 전시관</title>
+<title>달그늘 — 이름 없는 전시관</title>
 
 <style>
 :root {
-  --gold: #d9b77e;
-  --cream: #f8edd9;
-  --dark: #17121b;
+  --gold: #d8b77e;
+  --cream: #f4e7cd;
+  --night: #140f1d;
 }
+
 * { box-sizing: border-box; }
+
 body {
   margin: 0;
-  background: var(--dark);
+  background: var(--night);
   color: var(--cream);
-  font-family: "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
+  font-family: 'Malgun Gothic', sans-serif;
 }
-button, input, textarea { font: inherit; }
+
+[hidden] { display: none !important; }
+button, textarea, input { font: inherit; }
 button { cursor: pointer; }
-button:disabled { opacity: .35; cursor: default; }
-.hidden { display: none !important; }
-.screen {
+
+#app {
   min-height: 100dvh;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 16px;
-  padding: 18px;
-}
-.eyebrow {
-  color: var(--gold);
-  font-size: 12px;
-  letter-spacing: .2em;
-  text-align: center;
-}
-.btn {
-  padding: 12px 22px;
-  color: var(--cream);
-  background: #34262a;
-  border: 1px solid var(--gold);
-  border-radius: 7px;
-}
-.btn:hover:not(:disabled) { background: #614536; }
-.actions {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 12px;
-}
-.muted {
-  color: #d1baa0;
-  font-size: 13px;
-  text-align: center;
-  line-height: 1.7;
+  background: radial-gradient(circle, #382a39, #100d16);
 }
 
-/* 프롤로그 */
-#prologue {
-  background: radial-gradient(circle at 50% 20%, #503a3e, #120e15 75%);
-}
-.scene-art {
-  width: min(1100px, 100%);
-  aspect-ratio: 16 / 9;
-  overflow: hidden;
-  border: 1px solid #967552;
-  border-radius: 10px;
-  background: #151117;
-  box-shadow: 0 20px 65px #0009;
-}
-.scene-art img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  animation: fadeScene .8s ease;
-}
-@keyframes fadeScene {
-  from { opacity: .2; }
-  to { opacity: 1; }
-}
-.dialogue {
-  width: min(900px, 100%);
-  min-height: 130px;
-  padding: 24px;
-  display: grid;
-  place-items: center;
-  text-align: center;
-  white-space: pre-line;
-  line-height: 2;
-  background: #261d23;
-  border: 1px solid #816348;
-  border-radius: 9px;
-  font-size: clamp(15px, 2vw, 19px);
-}
-
-/* 전시관 */
-#museum { background: #100f17; }
-.museum-frame {
-  width: min(1200px, 100%);
+.stage {
   position: relative;
-  aspect-ratio: 1648 / 928;
+  width: min(100vw, 1500px);
+  aspect-ratio: 16 / 9;
+  max-height: 100dvh;
   overflow: hidden;
-  border: 1px solid #aa916b;
-  border-radius: 10px;
+  background: #18121c;
 }
-.museum-frame > img {
-  display: block;
+
+.scene-img {
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  object-fit: cover;
+  display: block;
 }
+
+.shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(transparent 45%, #0c0816d9);
+}
+
+.dialogue {
+  position: absolute;
+  left: 5%;
+  right: 5%;
+  bottom: 4%;
+  background: #130e1ddf;
+  border: 1px solid #b99a6a;
+  border-radius: 12px;
+  padding: 18px 24px;
+  min-height: 125px;
+  cursor: pointer;
+}
+
+.dialogue p {
+  margin: 0;
+  white-space: pre-line;
+  line-height: 1.85;
+  font-size: clamp(14px, 1.5vw, 20px);
+}
+
+.hint {
+  display: block;
+  text-align: right;
+  font-size: 12px;
+  color: #c7b69a;
+  margin-top: 8px;
+}
+
 .hotspot {
   position: absolute;
   transform: translate(-50%, -50%);
-  padding: 8px 12px;
-  min-width: 90px;
-  color: #fff2d7;
-  background: #19151dcc;
-  border: 1px solid #e8c68b;
-  border-radius: 9px;
-  box-shadow: 0 0 20px #f1c27c55;
+  border: 1px solid #f4d99e;
+  background: #1a1029e8;
+  color: #fff0c9;
+  padding: 10px 13px;
+  border-radius: 20px;
+  box-shadow: 0 0 18px #ffdc7d88;
+  white-space: nowrap;
+  font-size: clamp(11px, 1.2vw, 16px);
 }
-.hotspot:hover {
-  background: #6c4a38;
-  box-shadow: 0 0 30px #ffd28a99;
-}
-.hotspot span {
-  display: block;
-  font-size: 22px;
-  margin-bottom: 4px;
-}
-.hotspot.invite { left: 13%; top: 74%; }
-.hotspot.gift { left: 87%; top: 74%; }
-.hotspot.hourglass { left: 27%; top: 47%; }
-.hotspot.guestbook { left: 73%; top: 47%; }
-.hotspot.finale { left: 50%; top: 25%; }
 
-/* 팝업 */
-.overlay {
+.hotspot:hover {
+  transform: translate(-50%, -50%) scale(1.08);
+  background: #483057;
+}
+
+.topbar {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  right: 12px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.pill, .action {
+  border: 1px solid #cda975;
+  background: #25182d;
+  color: #ffe8bb;
+  border-radius: 8px;
+  padding: 10px 16px;
+}
+
+.pill:hover, .action:hover {
+  background: #48304c;
+}
+
+.gallery-title {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 8px 16px;
+  background: #160e20c9;
+  border: 1px solid var(--gold);
+  border-radius: 30px;
+  white-space: nowrap;
+}
+
+.modal-backdrop {
   position: fixed;
   inset: 0;
   z-index: 20;
+  background: #090611e8;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 16px;
-  background: #08070deb;
 }
+
 .modal {
-  position: relative;
-  width: min(850px, 100%);
+  width: min(760px, 100%);
   max-height: 94dvh;
   overflow-y: auto;
+  background: linear-gradient(150deg, #302039, #1a1223);
+  border: 2px solid var(--gold);
+  border-radius: 15px;
+  padding: 22px;
+  position: relative;
+  text-align: center;
+}
+
+.modal h2 {
+  margin: 4px 40px 16px;
+  color: #f4d8a2;
+}
+
+.modal-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  border: 0;
+  background: none;
+  color: white;
+  font-size: 28px;
+}
+
+.modal-content {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 15px;
-  padding: 20px;
-  background: #241d25;
-  border: 1px solid var(--gold);
-  border-radius: 12px;
+  gap: 16px;
+  line-height: 1.8;
 }
-.modal h2 {
-  margin: 0;
-  text-align: center;
-  color: #f0d3a2;
+
+.modal-content p { margin: 4px 0; }
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
 }
-.modal p { line-height: 1.8; text-align: center; }
-.modal-image {
-  display: block;
-  width: min(650px, 100%);
-  max-height: 60vh;
+
+.art {
+  width: min(480px, 100%);
+  max-height: 42dvh;
   object-fit: contain;
-  border-radius: 7px;
-}
-.close {
-  align-self: flex-end;
-  padding: 8px 13px;
-  background: transparent;
-  border: 1px solid #aa906d;
-  border-radius: 6px;
-  color: white;
 }
 
-/* 초대장 */
-.invitation-stage {
-  position: relative;
-  width: min(540px, 100%);
-}
-.invitation-stage > img {
-  display: block;
-  width: 100%;
-  height: auto;
-}
-.letter-paper {
-  position: absolute;
-  left: 12%;
-  right: 12%;
-  top: 14%;
-  bottom: 20%;
-  overflow-y: auto;
-  padding: 18px;
-  color: #4c3629;
-  background: #fff7e9f2;
-  border: 1px solid #c4a16e;
-  border-radius: 4px;
-}
-.letter-paper h3 {
-  font-family: Georgia, serif;
-  font-style: italic;
-  font-size: 30px;
-  color: #9a743e;
-  text-align: center;
-}
-.letter-paper p {
-  font-family: "Batang", serif;
-  font-size: 14px;
-  line-height: 2;
-  margin-bottom: 20px;
-  word-break: keep-all;
-}
-.ink {
-  opacity: 0;
-  filter: blur(4px);
-  transform: translateY(5px);
-  transition: opacity 1s, filter 1s, transform 1s;
-}
-.ink.visible {
-  opacity: 1;
-  filter: none;
-  transform: none;
-}
-
-/* 선물 상자 */
-.gift-stage {
-  position: relative;
-  width: min(740px, 100%);
-}
-.gift-stage img {
-  display: block;
-  width: 100%;
-  height: auto;
-  border-radius: 8px;
-}
-.gift-object {
-  position: absolute;
-  border: 1px solid transparent;
-  background: transparent;
-  border-radius: 12px;
-}
-.gift-object:hover {
-  background: #ffe4a51b;
-  border-color: #ffda94;
-}
-.gift-coins {
-  left: 19%; top: 27%; width: 29%; height: 48%;
-}
-.gift-letter {
-  left: 47%; top: 30%; width: 31%; height: 43%;
-}
-.gift-detail {
-  width: min(620px, 100%);
-  padding: 30px 22px;
-  color: #493527;
-  background: #f8eedc;
-  border: 3px double #b99865;
-  border-radius: 8px;
-  text-align: center;
-}
-.gift-detail h3 { color: #825e32; }
-.gift-detail p {
-  white-space: pre-line;
-  font-family: "Batang", serif;
-}
-
-/* 모래시계 */
-.hourglass-symbol {
-  font-size: 85px;
-  filter: drop-shadow(0 0 20px #d8b16b);
-  animation: float 3s ease-in-out infinite;
-}
-@keyframes float {
-  50% { transform: translateY(-9px); }
-}
-.fortune-paper {
-  width: min(600px, 100%);
-  padding: 30px;
-  background: #f3e6c9;
-  color: #4e372a;
-  border: 3px double #ad8858;
-  border-radius: 8px;
-  text-align: center;
-  line-height: 2;
-  white-space: pre-line;
-}
-
-/* 방명록 */
-.book {
-  width: min(680px, 100%);
-  padding: 25px;
-  color: #453023;
-  background: #f0e2c4;
-  border: 8px solid #6b4933;
-  border-radius: 12px;
-}
-.book h3 { text-align: center; }
-.book-entry {
-  width: 100%;
-  padding: 9px;
-  margin: 4px 0;
+.paper {
+  background: #f4e6c7;
+  color: #4a3528;
+  padding: 24px;
   text-align: left;
-  background: transparent;
-  border: 0;
-  border-bottom: 1px solid #b69b78;
-  color: #453023;
-}
-.book-entry:hover { background: #e1ccaa; }
-.book input, .book textarea {
-  display: block;
+  border: 4px double #aa895c;
+  border-radius: 7px;
+  white-space: pre-line;
+  line-height: 2;
   width: 100%;
-  padding: 10px;
-  margin: 10px 0;
-  border: 1px solid #b59b7d;
-  border-radius: 5px;
-  background: #fffaf0;
-  color: #34251b;
+  font-family: Georgia, 'Malgun Gothic', serif;
+  animation: ink 1.3s ease both;
 }
-.book textarea { min-height: 85px; resize: vertical; }
-.book .btn { margin-top: 8px; }
-.page-indicator { text-align: center; margin: 12px; }
 
-/* 마지막 공간 */
-#birthday {
-  background: radial-gradient(circle at 50% 30%, #715073, #221627 65%, #100d16);
-  text-align: center;
+@keyframes ink {
+  from { opacity: 0; filter: blur(5px); }
+  to { opacity: 1; filter: blur(0); }
 }
-.birthday-card {
-  width: min(750px, 100%);
-  padding: 50px 25px;
-  border: 1px solid var(--gold);
-  border-radius: 15px;
-  background: #241a2cdd;
+
+/* 타로 카드 디자인 */
+
+.tarot-deck {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  width: 100%;
+  padding: 16px 0;
 }
-.cake { font-size: clamp(75px, 15vw, 130px); }
-.birthday-card h1 {
-  color: #f4d5a0;
-  font-size: clamp(30px, 6vw, 55px);
+
+.tarot-card {
+  width: clamp(76px, 15vw, 116px);
+  aspect-ratio: 2 / 3;
+  border: 3px double var(--gold);
+  border-radius: 9px;
+  color: #e9ce99;
+  background: radial-gradient(circle, #574171, #24172e 75%);
+  box-shadow: 0 8px 24px #0008;
+  position: relative;
+  transition: transform .2s;
 }
-.birthday-card p {
-  line-height: 2.1;
-  font-size: clamp(15px, 2vw, 19px);
+
+.tarot-card::before {
+  content: '☾ ✦ ☽';
+  position: absolute;
+  inset: 7px;
+  border: 1px solid #b99a64;
+  border-radius: 5px;
+  display: grid;
+  place-items: center;
+  font-size: 21px;
+}
+
+.tarot-card:hover {
+  transform: translateY(-10px);
+}
+
+.tarot-reveal {
+  width: min(290px, 100%);
+  min-height: 310px;
+  border: 5px double var(--gold);
+  border-radius: 12px;
+  background: radial-gradient(circle, #56416d, #1f162b 80%);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  padding: 20px;
+  animation: flip .6s ease;
+}
+
+.tarot-symbol { font-size: 70px; }
+
+.tarot-english {
+  font: 14px Georgia, serif;
+  letter-spacing: 2px;
+  color: #ead2a0;
+}
+
+@keyframes flip {
+  from { opacity: 0; transform: rotateY(85deg); }
+  to { opacity: 1; transform: rotateY(0); }
+}
+
+.tarot-result {
+  width: min(620px, 100%);
+  background: #f4e6c7;
+  color: #493428;
+  border: 3px double #aa895c;
+  border-radius: 8px;
+  padding: 24px;
+  line-height: 2;
   white-space: pre-line;
 }
 
-@media (max-width: 650px) {
-  .screen { padding: 10px; }
-  .scene-art { aspect-ratio: 4 / 3; }
-  .dialogue { min-height: 170px; padding: 15px; }
-  .hotspot {
-    min-width: 0;
-    padding: 5px;
-    font-size: 10px;
+.field {
+  width: 100%;
+  padding: 12px;
+  border-radius: 7px;
+  border: 1px solid #b99a64;
+  background: #f8efdc;
+  color: #3a2922;
+}
+
+.guest-entry {
+  width: 100%;
+  text-align: left;
+  background: #2a2030;
+  border: 1px solid #6f5973;
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.guest-entry small { color: #c6aa81; }
+
+.birthday {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 30px;
+  background: radial-gradient(circle at 50% 30%, #6d4b65, #23172c 70%);
+}
+
+.birthday h1 {
+  font-size: clamp(30px, 5vw, 72px);
+  color: #ffe0a7;
+}
+
+.birthday p {
+  line-height: 2;
+  max-width: 650px;
+}
+
+.cake { font-size: clamp(90px, 13vw, 160px); }
+
+.sparkle {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: radial-gradient(#ffdfac 1px, transparent 1px);
+  background-size: 55px 63px;
+  opacity: .35;
+}
+
+@media (max-width: 600px) {
+  .stage {
+    aspect-ratio: 9 / 16;
+    max-height: 100dvh;
   }
-  .hotspot span { font-size: 16px; }
-  .letter-paper { padding: 9px; }
-  .letter-paper p { font-size: 12px; line-height: 1.7; }
-  .modal { padding: 12px; }
+
+  .dialogue {
+    left: 3%;
+    right: 3%;
+    bottom: 3%;
+    padding: 13px;
+    min-height: 145px;
+  }
+
+  .modal { padding: 15px; }
+  .hotspot { font-size: 11px; padding: 7px; }
+  .gallery-title { top: 55px; }
+  .tarot-deck { gap: 7px; }
+  .tarot-card { width: 17%; }
 }
 </style>
 </head>
 
 <body>
 
-<!-- 프롤로그 -->
-<main id="prologue" class="screen">
-  <div class="eyebrow">DALGEUNEUL · PROLOGUE</div>
+<div id="app"></div>
 
-  <div class="scene-art">
-    <img id="sceneImage" src="prologue_01.png" alt="오두막 침실">
-  </div>
-
-  <div class="dialogue" id="dialogue"></div>
-  <div class="muted" id="sceneCounter">1 / 7</div>
-
-  <div class="actions">
-    <button class="btn" id="prevScene">← 이전</button>
-    <button class="btn" id="nextScene">다음 →</button>
-  </div>
-</main>
-
-<!-- 전시관 -->
-<section id="museum" class="screen hidden">
-  <div class="eyebrow">SECRET EXHIBITION</div>
-  <h1>이름 없는 전시관</h1>
-
-  <div class="museum-frame">
-    <img src="museum.png" alt="비밀 전시관">
-
-    <button class="hotspot invite" data-exhibit="invite">
-      <span>✉</span>초대장
-    </button>
-
-    <button class="hotspot gift" data-exhibit="gift">
-      <span>🎁</span>선물 상자
-    </button>
-
-    <button class="hotspot hourglass" data-exhibit="hourglass">
-      <span>⌛</span>모래시계
-    </button>
-
-    <button class="hotspot guestbook" data-exhibit="guestbook">
-      <span>✒</span>방명록
-    </button>
-
-    <button class="hotspot finale" data-exhibit="finale">
-      <span>✦</span>마지막 문
-    </button>
-  </div>
-
-  <p class="muted">전시대 위의 물건을 선택해 주세요.</p>
-
-  <button class="btn" id="returnPrologue">
-    ← 창고 문 앞으로
-  </button>
-</section>
-
-<!-- 생일 축하 공간 -->
-<section id="birthday" class="screen hidden">
-  <div class="birthday-card">
-    <div class="eyebrow">THE FINAL ROOM</div>
-    <div class="cake">🎂</div>
-    <h1>생일 축하합니다!</h1>
-    <p>
-      여기까지 와 주셔서 감사합니다.
-
-      사실 이 전시관은 처음부터
-      단 한 사람을 위해 준비된 공간이었습니다.
-
-      바로 오늘의 주인장, 당신을 위해서요.
-
-      앞으로도 좋아하는 것을 마음껏 즐기고,
-      웃을 일이 더 많아지는 날들이 이어지기를 바랍니다.
-
-      그리고 오늘만큼은
-      세상에서 가장 행복한 주인장이 되어 주세요.
-
-      생일 진심으로 축하합니다!
-    </p>
-    <button class="btn" id="returnMuseum">
-      ← 전시관으로 돌아가기
-    </button>
-  </div>
-</section>
-
-<!-- 팝업 -->
-<div id="overlay" class="overlay hidden">
-  <div class="modal" role="dialog" aria-modal="true"
-       aria-labelledby="modalTitle">
-    <button class="close" id="closeModal">✕ 닫기</button>
-    <div class="eyebrow" id="modalBadge"></div>
+<div id="modalBackdrop" class="modal-backdrop" hidden>
+  <section class="modal" role="dialog" aria-modal="true">
+    <button class="modal-close" id="modalClose">×</button>
     <h2 id="modalTitle"></h2>
-    <div id="modalContent" style="width:100%;display:flex;flex-direction:column;align-items:center;gap:15px"></div>
+    <div class="modal-content" id="modalContent"></div>
     <div class="actions" id="modalActions"></div>
-    <div class="muted" id="modalStatus"></div>
-  </div>
+  </section>
 </div>
 
 <script>
-"use strict";
+'use strict';
 
 const $ = id => document.getElementById(id);
+const app = $('app');
+
+function node(tag, cls = '', text) {
+  const e = document.createElement(tag);
+  if (cls) e.className = cls;
+  if (text !== undefined) e.textContent = text;
+  return e;
+}
+
+function btn(text, fn, cls = 'action') {
+  const e = node('button', cls, text);
+  e.type = 'button';
+  e.addEventListener('click', fn);
+  return e;
+}
 
 /* 프롤로그 */
 
-const prologueScenes = [
+const scenes = [
   {
-    image: "prologue_01.png",
-    alt: "오두막 침실",
-    text: "눈을 뜨자 익숙한 나무 천장이 보인다.\n" +
-          "창밖에서는 새들이 아침을 알리고 있다.\n" +
-          "…오늘도 평범한 하루의 시작이다."
+    image: 'prologue_01.png',
+    lines: [
+      '눈을 뜨자 익숙한 나무 천장이 보인다.',
+      '창밖에서는 새들이 아침을 알리고 있다.',
+      '…오늘도 평범한 하루의 시작이다.'
+    ]
   },
   {
-    image: "prologue_02.png",
-    alt: "신비로운 숲길",
-    text: "오두막을 나와 숲길에 들어섰다.\n" +
-          "나뭇잎 사이로 아침 햇살이 흘러내린다.\n" +
-          "오늘따라 숲이 조금 더 신비롭게 느껴진다."
+    image: 'prologue_02.png',
+    lines: [
+      '오두막을 나와 숲길에 들어섰다.',
+      '나뭇잎 사이로 아침 햇살이 흘러내린다.',
+      '오늘따라 숲이 조금 더 신비롭게 느껴진다.'
+    ]
   },
   {
-    image: "prologue_03.png",
-    alt: "달그늘 술집 외관",
-    text: "익숙한 길 끝에 따뜻한 불빛이 보인다.\n" +
-          "달과 별이 새겨진 간판, 「달그늘」.\n" +
-          "언제나처럼 그곳이 나를 기다리고 있다."
+    image: 'prologue_03.png',
+    lines: [
+      '익숙한 길 끝에 따뜻한 불빛이 보인다.',
+      '달과 별이 새겨진 간판, 「달그늘」.',
+      '언제나처럼 그곳이 나를 기다리고 있다.'
+    ]
   },
   {
-    image: "prologue_04.png",
-    alt: "달그늘 술집 입구",
-    text: "낡은 나무문 앞에 멈춰 섰다.\n" +
-          "안쪽에서 희미한 온기와 나무 향이 전해진다.\n" +
-          "자, 오늘도 문을 열어 볼까."
+    image: 'prologue_04.png',
+    lines: [
+      '낡은 나무문 앞에 멈춰 섰다.',
+      '안쪽에서 희미한 온기와 나무 향이 전해진다.',
+      '자, 오늘도 문을 열어 볼까.'
+    ]
   },
   {
-    image: "prologue_05.png",
-    alt: "달그늘 술집 내부",
-    text: "익숙한 술집의 풍경이 눈앞에 펼쳐진다.\n" +
-          "창가의 햇살, 정돈된 바, 조용한 테이블들.\n" +
-          "그런데… 저 안쪽이 원래 저랬던가?"
+    image: 'prologue_05.png',
+    lines: [
+      '익숙한 술집의 풍경이 눈앞에 펼쳐진다.',
+      '창가의 햇살, 정돈된 바, 조용한 테이블들.',
+      '그런데… 저 안쪽이 원래 저랬던가?'
+    ]
   },
   {
-    image: "prologue_06.png",
-    alt: "창고 문으로 이동",
-    text: "무심코 안쪽으로 발걸음을 옮겼다.\n" +
-          "초록색 좌석 옆, 오래된 나무문 하나가 눈에 들어온다.\n" +
-          "분명 익숙한 곳인데, 어쩐지 낯설다."
+    image: 'prologue_06.png',
+    lines: [
+      '무심코 안쪽으로 발걸음을 옮겼다.',
+      '초록색 좌석 옆, 오래된 나무문 하나가 눈에 들어온다.',
+      '분명 익숙한 곳인데, 어쩐지 낯설다.'
+    ]
   },
   {
-    image: "prologue_07.png",
-    alt: "낡은 창고 문",
-    text: "문 앞에 서자 발걸음이 멎는다.\n" +
-          "오래된 나뭇결과 녹슨 손잡이.\n" +
-          "…이 문 너머에는 무엇이 있을까?"
+    image: 'prologue_07.png',
+    lines: [
+      '문 앞에 서자 발걸음이 멎는다.',
+      '오래된 나뭇결과 녹슨 손잡이.',
+      '…이 문 너머에는 무엇이 있을까?'
+    ]
   }
 ];
 
 let sceneIndex = 0;
-let inkTimers = [];
-let guestPage = 0;
-
-function showScreen(id) {
-  ["prologue", "museum", "birthday"].forEach(name => {
-    $(name).classList.toggle("hidden", name !== id);
-  });
-  window.scrollTo(0, 0);
-}
+let lineIndex = 0;
+let screen = 'prologue';
 
 function renderScene() {
-  const scene = prologueScenes[sceneIndex];
-  $("sceneImage").src = scene.image;
-  $("sceneImage").alt = scene.alt;
-  $("dialogue").textContent = scene.text;
-  $("sceneCounter").textContent =
-    `${sceneIndex + 1} / ${prologueScenes.length}`;
-  $("prevScene").disabled = sceneIndex === 0;
-  $("nextScene").textContent =
-    sceneIndex === 6 ? "창고 문 열기 →" : "다음 →";
+  screen = 'prologue';
+  const scene = scenes[sceneIndex];
+
+  app.replaceChildren();
+
+  const stage = node('main', 'stage');
+  const img = node('img', 'scene-img');
+  img.src = scene.image;
+  img.alt = '달그늘로 향하는 풍경';
+
+  stage.append(img, node('div', 'shade'));
+
+  const bar = node('div', 'topbar');
+  bar.append(btn('처음부터', () => {
+    sceneIndex = 0;
+    lineIndex = 0;
+    renderScene();
+  }, 'pill'));
+
+  stage.append(bar);
+
+  const dialogue = node('div', 'dialogue');
+  dialogue.tabIndex = 0;
+  dialogue.setAttribute('role', 'button');
+
+  dialogue.append(
+    node('p', '', scene.lines[lineIndex]),
+    node('span', 'hint',
+      sceneIndex === 6 && lineIndex === 2
+        ? '클릭하여 창고 문 열기 →'
+        : '클릭하여 계속 →'
+    )
+  );
+
+  dialogue.addEventListener('click', advance);
+  dialogue.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      advance();
+    }
+  });
+
+  stage.append(dialogue);
+  app.append(stage);
 }
 
-$("nextScene").onclick = () => {
-  if (sceneIndex < 6) {
+function advance() {
+  if (screen !== 'prologue') return;
+
+  const scene = scenes[sceneIndex];
+
+  if (lineIndex < scene.lines.length - 1) {
+    lineIndex++;
+    renderScene();
+  } else if (sceneIndex < scenes.length - 1) {
     sceneIndex++;
+    lineIndex = 0;
     renderScene();
   } else {
-    showScreen("museum");
+    renderGallery();
   }
-};
-
-$("prevScene").onclick = () => {
-  if (sceneIndex > 0) {
-    sceneIndex--;
-    renderScene();
-  }
-};
-
-$("returnPrologue").onclick = () => {
-  sceneIndex = 6;
-  renderScene();
-  showScreen("prologue");
-};
-
-$("returnMuseum").onclick = () => showScreen("museum");
-
-/* 공통 팝업 */
-
-function clearTimers() {
-  inkTimers.forEach(clearTimeout);
-  inkTimers = [];
 }
 
-function clearModal() {
-  clearTimers();
-  $("modalContent").replaceChildren();
-  $("modalActions").replaceChildren();
-  $("modalStatus").textContent = "";
+/* 전시관 */
+
+const exhibits = [
+  { id: 'invitation', x: 13, y: 74, label: '✉ 초대장' },
+  { id: 'gift', x: 87, y: 74, label: '🎁 선물 상자' },
+  { id: 'tarot', x: 27, y: 47, label: '✦ 타로 카드' },
+  { id: 'guestbook', x: 73, y: 47, label: '📜 방명록' },
+  { id: 'final', x: 50, y: 25, label: '🚪 마지막 문' }
+];
+
+function renderGallery() {
+  screen = 'gallery';
+  app.replaceChildren();
+
+  const stage = node('main', 'stage');
+  const img = node('img', 'scene-img');
+  img.src = 'museum.png';
+  img.alt = '비밀 전시관';
+
+  stage.append(
+    img,
+    node('div', 'gallery-title', '✦ 이름 없는 전시관 ✦')
+  );
+
+  for (const item of exhibits) {
+    const hotspot = btn(
+      item.label,
+      () => openExhibit(item.id),
+      'hotspot'
+    );
+
+    hotspot.style.left = item.x + '%';
+    hotspot.style.top = item.y + '%';
+    stage.append(hotspot);
+  }
+
+  const bar = node('div', 'topbar');
+  bar.append(btn('← 술집으로', () => {
+    sceneIndex = 6;
+    lineIndex = 0;
+    renderScene();
+  }, 'pill'));
+
+  stage.append(bar);
+  app.append(stage);
+}
+
+/* 팝업 공통 기능 */
+
+function openModal(title) {
+  $('modalTitle').textContent = title;
+  $('modalContent').replaceChildren();
+  $('modalActions').replaceChildren();
+  $('modalBackdrop').hidden = false;
+  document.body.style.overflow = 'hidden';
 }
 
 function closeModal() {
-  clearTimers();
-  $("overlay").classList.add("hidden");
+  $('modalBackdrop').hidden = true;
+  document.body.style.overflow = '';
 }
 
-function addButton(label, callback) {
-  const button = document.createElement("button");
-  button.className = "btn";
-  button.textContent = label;
-  button.onclick = callback;
-  $("modalActions").append(button);
+$('modalClose').addEventListener('click', closeModal);
+
+$('modalBackdrop').addEventListener('click', e => {
+  if (e.target === $('modalBackdrop')) closeModal();
+});
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeModal();
+});
+
+function addButton(label, fn) {
+  $('modalActions').append(btn(label, fn));
 }
 
-function addParagraph(text) {
-  const p = document.createElement("p");
-  p.textContent = text;
-  $("modalContent").append(p);
-}
-
-function addImage(filename, alt) {
-  const img = document.createElement("img");
-  img.src = filename;
+function addArt(src, alt) {
+  const img = node('img', 'art');
+  img.src = src;
   img.alt = alt;
-  img.className = "modal-image";
-  $("modalContent").append(img);
+  $('modalContent').append(img);
 }
 
-function openExhibit(type) {
-  if (type === "finale") {
-    closeModal();
-    showScreen("birthday");
-    return;
-  }
-
-  clearModal();
-  $("overlay").classList.remove("hidden");
-
-  const titles = {
-    invite: ["EXHIBIT 01", "수상한 초대장"],
-    gift: ["EXHIBIT 02", "주인장을 위한 선물 상자"],
-    hourglass: ["EXHIBIT 03", "운세 모래시계"],
-    guestbook: ["EXHIBIT 04", "방명록"]
-  };
-
-  $("modalBadge").textContent = titles[type][0];
-  $("modalTitle").textContent = titles[type][1];
-
-  if (type === "invite") renderInvitationClosed();
-  if (type === "gift") renderGiftClosed();
-  if (type === "hourglass") renderHourglass();
-  if (type === "guestbook") renderGuestbook();
+function addText(text) {
+  const p = node('p', '', text);
+  $('modalContent').append(p);
+  return p;
 }
 
-document.querySelectorAll("[data-exhibit]").forEach(button => {
-  button.onclick = () => openExhibit(button.dataset.exhibit);
-});
-
-$("closeModal").onclick = closeModal;
-$("overlay").onclick = event => {
-  if (event.target === $("overlay")) closeModal();
-};
-
-document.addEventListener("keydown", event => {
-  if (event.key === "Escape") {
-    closeModal();
-    return;
-  }
-  if (!$("overlay").classList.contains("hidden")) return;
-  if ($("prologue").classList.contains("hidden")) return;
-  if (event.key === "ArrowRight") $("nextScene").click();
-  if (event.key === "ArrowLeft") $("prevScene").click();
-});
+function openExhibit(id) {
+  if (id === 'invitation') showInvitation(false);
+  if (id === 'gift') showGift(0);
+  if (id === 'tarot') renderTarot();
+  if (id === 'guestbook') showGuestbook();
+  if (id === 'final') showFinalDoor();
+}
 
 /* 초대장 */
 
-const invitationText = [
-  "친애하는 주인장께.",
-  "먼저, 이곳에 도착하신 것을 환영합니다.",
-  "평범한 창고 문 너머에 이런 공간이 있을 줄은 예상하지 못하셨겠지요.",
-  "혹시 잘못 들어오신 건 아닌지 걱정하고 계신다면, 안심하셔도 좋습니다.",
-  "이곳은 처음부터 당신을 기다리고 있었으니까요.",
-  "그동안 이 술집에서는 수많은 손님이 문을 열고 들어왔겠지요.",
-  "하지만 오늘은 조금 다릅니다.",
-  "이번에는 주인장께서 손님이 되어 주셔야겠습니다.",
-  "이곳에는 당신을 위해 준비한 몇 가지 작은 전시물이 있습니다.",
-  "그중에는 쓸모 있는 것도, 쓸모없는 것도 있을지 모릅니다. 물론 어느 쪽인지는 저희도 장담할 수 없습니다.",
-  "다만 한 가지는 약속드리겠습니다.",
-  "이 모든 것은 오직 당신을 위해 준비되었습니다.",
-  "그러니 너무 서두르지 마시고, 마음이 이끄는 대로 천천히 둘러봐 주세요.",
-  "그리고 마지막 문에 도착하셨을 때, 이 초대장의 진짜 의미를 알게 되실 겁니다.",
-  "— 이름 없는 전시관의 안내인으로부터 —"
-];
+const invitation = `친애하는 주인장께.
 
-function renderInvitationClosed() {
-  clearModal();
-  addImage("invitation_closed.png", "닫힌 초대장");
-  addParagraph("검은색 표지 위로 금색 글씨가 반짝인다.");
-  addButton("초대장 펼치기", renderInvitationOpen);
-  addButton("전시관으로 돌아가기", closeModal);
-}
+먼저, 이곳에 도착하신 것을 환영합니다.
 
-function renderInvitationOpen() {
-  clearModal();
+평범한 창고 문 너머에 이런 공간이 있을 줄은 예상하지 못하셨겠지요.
 
-  const stage = document.createElement("div");
-  stage.className = "invitation-stage";
+혹시 잘못 들어오신 건 아닌지 걱정하고 계신다면, 안심하셔도 좋습니다.
 
-  const img = document.createElement("img");
-  img.src = "invitation_open.png";
-  img.alt = "펼쳐진 초대장";
+이곳은 처음부터 당신을 기다리고 있었으니까요.
 
-  const paper = document.createElement("div");
-  paper.className = "letter-paper";
+그동안 이 술집에서는 수많은 손님이 문을 열고 들어왔겠지요.
 
-  const heading = document.createElement("h3");
-  heading.textContent = "Invitatio";
-  paper.append(heading);
+하지만 오늘은 조금 다릅니다.
 
-  invitationText.forEach((text, index) => {
-    const p = document.createElement("p");
-    p.className = "ink";
-    p.textContent = text;
-    paper.append(p);
+이번에는 주인장께서 손님이 되어 주셔야겠습니다.
 
-    inkTimers.push(setTimeout(() => {
-      p.classList.add("visible");
-    }, 250 + index * 600));
-  });
+이곳에는 당신을 위해 준비한 몇 가지 작은 전시물이 있습니다.
 
-  stage.append(img, paper);
-  $("modalContent").append(stage);
+그중에는 쓸모 있는 것도, 쓸모없는 것도 있을지 모릅니다. 물론 어느 쪽인지는 저희도 장담할 수 없습니다.
 
-  $("modalStatus").textContent =
-    "편지 안쪽을 스크롤하면 이어지는 내용을 읽을 수 있습니다.";
+다만 한 가지는 약속드리겠습니다.
 
-  addButton("글씨 모두 보기", () => {
-    clearTimers();
-    paper.querySelectorAll(".ink").forEach(p => {
-      p.classList.add("visible");
-    });
-  });
-  addButton("다시 접기", renderInvitationClosed);
-  addButton("전시관으로 돌아가기", closeModal);
+이 모든 것은 오직 당신을 위해 준비되었습니다.
+
+그러니 너무 서두르지 마시고, 마음이 이끄는 대로 천천히 둘러봐 주세요.
+
+그리고 마지막 문에 도착하셨을 때, 이 초대장의 진짜 의미를 알게 되실 겁니다.
+
+— 이름 없는 전시관의 안내인으로부터 —`;
+
+function showInvitation(open) {
+  openModal('EXHIBIT 01 · 비밀 초대장');
+
+  addArt(
+    open ? 'invitation_open.png' : 'invitation_closed.png',
+    '초대장'
+  );
+
+  if (open) {
+    $('modalContent').append(
+      node('div', 'paper', invitation)
+    );
+  } else {
+    addText('당신을 기다리고 있던 초대장이다.');
+  }
+
+  addButton(
+    open ? '초대장 접기' : '초대장 펼치기',
+    () => showInvitation(!open)
+  );
+
+  addButton('전시관으로 돌아가기', closeModal);
 }
 
 /* 선물 상자 */
 
-function renderGiftClosed() {
-  clearModal();
-  addImage("gift_closed.png", "닫힌 선물 상자");
-  addParagraph("전시대 위에 정성스럽게 포장된 상자가 놓여 있다.");
-  addButton("상자 열기", renderGiftOpen);
-  addButton("전시관으로 돌아가기", closeModal);
-}
+function showGift(step) {
+  openModal('EXHIBIT 02 · 작은 선물');
 
-function renderGiftOpen() {
-  clearModal();
-
-  const stage = document.createElement("div");
-  stage.className = "gift-stage";
-
-  const img = document.createElement("img");
-  img.src = "gift_contents.png";
-  img.alt = "금화 주머니와 봉인된 편지";
-  stage.append(img);
-
-  const coins = document.createElement("button");
-  coins.className = "gift-object gift-coins";
-  coins.setAttribute("aria-label", "금화 주머니 살펴보기");
-  coins.onclick = renderGiftCoins;
-
-  const letter = document.createElement("button");
-  letter.className = "gift-object gift-letter";
-  letter.setAttribute("aria-label", "봉인된 편지 읽기");
-  letter.onclick = renderGiftLetter;
-
-  stage.append(coins, letter);
-  $("modalContent").append(stage);
-
-  addParagraph("상자 안에는 두 가지 물건이 있다. 무엇부터 살펴볼까?");
-  $("modalStatus").textContent =
-    "왼쪽 주머니 또는 오른쪽 편지를 클릭해 주세요.";
-
-  addButton("상자 닫기", renderGiftClosed);
-  addButton("전시관으로 돌아가기", closeModal);
-}
-
-function renderGiftCoins() {
-  clearModal();
-
-  const card = document.createElement("div");
-  card.className = "gift-detail";
-
-  const h = document.createElement("h3");
-  h.textContent = "주인장께 드리는 금화";
-
-  const p = document.createElement("p");
-  p.textContent =
-    "작은 주머니 안에 금화가 반짝이고 있다.\n" +
-    "오늘만큼은 이 보물이 주인장의 것이기를.\n\n" +
-    "※ 실제 선물은 방송에서 별도로 전달됩니다.";
-
-  card.append(h, p);
-  $("modalContent").append(card);
-  addButton("상자로 돌아가기", renderGiftOpen);
-}
-
-function renderGiftLetter() {
-  clearModal();
-
-  const card = document.createElement("div");
-  card.className = "gift-detail";
-
-  const h = document.createElement("h3");
-  h.textContent = "주인장께 드리는 편지";
-  card.append(h);
-
-  const lines = [
-    "친애하는 주인장께.",
-    "이 작은 상자에 담긴 마음이 조금이나마 전해지기를 바랍니다.",
-    "언제나 주인장다운 모습으로, 하고 싶은 이야기를 마음껏 이어가 주세요.",
-    "— 당신을 응원하는 어느 손님으로부터 —"
+  const images = [
+    'gift_closed.png',
+    'gift_open.png',
+    'gift_contents.png'
   ];
 
-  lines.forEach((text, index) => {
-    const p = document.createElement("p");
-    p.className = "ink";
-    p.textContent = text;
-    card.append(p);
+  addArt(images[step], '선물 상자');
 
-    inkTimers.push(setTimeout(() => {
-      p.classList.add("visible");
-    }, 300 + index * 850));
-  });
+  const descriptions = [
+    '당신 앞으로 놓인 작은 선물 상자다.',
+    '상자가 열렸다. 안쪽에 무언가 더 보인다.',
+    '반짝이는 선물이 당신을 기다리고 있다.'
+  ];
 
-  $("modalContent").append(card);
-  $("modalStatus").textContent =
-    "이 편지 내용은 임시 문구이며 교체할 수 있습니다.";
-  addButton("상자로 돌아가기", renderGiftOpen);
+  addText(descriptions[step]);
+
+  if (step < 2) {
+    addButton(
+      step === 0 ? '상자 열기' : '선물 살펴보기',
+      () => showGift(step + 1)
+    );
+  } else {
+    addButton('다시 살펴보기', () => showGift(0));
+  }
+
+  addButton('전시관으로 돌아가기', closeModal);
 }
 
-/* 운세 모래시계 */
+/* ===================================
+   운명의 타로 카드
+   22종 + 자동 운세 조합
+=================================== */
 
-const fortunes = [
-  "대길!\n오늘은 좋은 일이 찾아올 운세입니다.\n단, 침대에서 일어나는 데에는 별도의 의지가 필요합니다.",
-  "길!\n웃을 일이 하나 더 생길 것입니다.\n어쩌면 방금 이 운세를 읽은 것이 그 시작일지도 모릅니다.",
-  "초대길!\n하고 싶은 일을 마음껏 즐겨도 좋은 날입니다.\n세상이 조금 시끄럽더라도 당신의 속도로 걸어가세요.",
-  "소길!\n작은 행운이 당신을 기다립니다.\n냉장고에서 잊고 있던 간식을 발견할지도 모릅니다.",
-  "대대길!\n당신의 앞날에 행복이 가득하길.\n그리고 오늘은 귀찮은 일들이 알아서 해결되길!",
-  "수수께끼 운세!\n오늘의 행운 아이템은… 숟가락입니다.\n이유는 모래시계도 모른다고 합니다.",
-  "특별한 운세!\n누군가 당신의 하루를 응원하고 있습니다.\n그 마음이 오래도록 닿기를 바랍니다."
+const tarotCards = [
+  ['바보', 'THE FOOL', '🃏', '새로운 시작'],
+  ['마법사', 'THE MAGICIAN', '🪄', '가능성과 재능'],
+  ['여사제', 'THE HIGH PRIESTESS', '🌙', '직감과 비밀'],
+  ['여황제', 'THE EMPRESS', '🌸', '풍요와 행복'],
+  ['황제', 'THE EMPEROR', '👑', '안정과 자신감'],
+  ['교황', 'THE HIEROPHANT', '📜', '지혜와 조언'],
+  ['연인', 'THE LOVERS', '💞', '관계와 선택'],
+  ['전차', 'THE CHARIOT', '🛡️', '도전과 전진'],
+  ['힘', 'STRENGTH', '🦁', '용기와 인내'],
+  ['은둔자', 'THE HERMIT', '🏮', '성찰과 휴식'],
+  ['운명의 수레바퀴', 'WHEEL OF FORTUNE', '🎡', '변화와 행운'],
+  ['정의', 'JUSTICE', '⚖️', '균형과 판단'],
+  ['매달린 사람', 'THE HANGED MAN', '🌿', '새로운 관점'],
+  ['죽음', 'DEATH', '🦋', '변화와 새로운 출발'],
+  ['절제', 'TEMPERANCE', '🏺', '조화와 평온'],
+  ['악마', 'THE DEVIL', '🎭', '유혹과 욕심'],
+  ['탑', 'THE TOWER', '⚡', '예상 밖의 사건'],
+  ['별', 'THE STAR', '⭐', '희망과 응원'],
+  ['달', 'THE MOON', '🌘', '상상력과 불확실성'],
+  ['태양', 'THE SUN', '☀️', '기쁨과 활력'],
+  ['심판', 'JUDGEMENT', '🔔', '깨달음과 기회'],
+  ['세계', 'THE WORLD', '🌍', '성취와 완성']
 ];
 
-function renderHourglass() {
-  clearModal();
+const openings = [
+  '오늘은 {theme}의 기운이 당신을 감싸고 있습니다.',
+  '카드가 속삭입니다. 지금 당신에게 필요한 것은 {theme}입니다.',
+  '오래된 카드에 {theme}의 징조가 나타났습니다.',
+  '오늘의 운명은 {theme}을 향해 움직이고 있습니다.',
+  '이 카드는 당신에게 {theme}의 가능성을 보여줍니다.',
+  '어쩌면 오늘은 {theme}이 중요한 의미를 갖는 날일지도 모릅니다.',
+  '운명의 실타래 끝에서 {theme}의 빛이 보입니다.',
+  '카드의 별빛이 {theme}의 길을 가리키고 있습니다.'
+];
 
-  const symbol = document.createElement("div");
-  symbol.className = "hourglass-symbol";
-  symbol.textContent = "⌛";
-  $("modalContent").append(symbol);
+const middles = [
+  '평소와 다른 작은 선택이 뜻밖의 즐거움으로 이어질 수 있습니다.',
+  '당신의 진심이 누군가에게 좋은 기억으로 남을 것입니다.',
+  '너무 완벽하려고 애쓰지 않아도 괜찮습니다.',
+  '오랫동안 미뤄 두었던 일을 시작하기 좋은 날입니다.',
+  '사소한 일에서 생각보다 큰 기쁨을 발견할 수 있습니다.',
+  '주변 사람들과 나누는 웃음이 오늘의 행운이 될 것입니다.',
+  '지금까지 쌓아 온 노력은 분명 의미가 있습니다.',
+  '오늘은 조금 느긋하게 자신만의 속도를 찾아보세요.',
+  '예상하지 못한 순간에 좋은 아이디어가 떠오를 수 있습니다.',
+  '누군가의 따뜻한 한마디가 당신에게 힘이 될지도 모릅니다.',
+  '좋아하는 것을 마음껏 즐기는 시간이 필요합니다.',
+  '작은 용기가 새로운 이야기를 시작하게 할 수 있습니다.'
+];
 
-  addParagraph(
-    "오래된 모래시계 안에서 금빛 모래가 반짝인다.\n" +
-    "한 번 뒤집으면 오늘의 운세가 나타난다고 한다."
-  );
+const funny = [
+  '단, 이 예언은 모래시계가 휴가 중이라 검증되지 않았습니다.',
+  '행운의 물건은 숟가락입니다. 이유는 카드도 모릅니다.',
+  '오늘의 행운 수치는 99입니다. 나머지 1은 어디 갔는지 모릅니다.',
+  '카드가 당신에게 박수를 보냅니다. 손이 없다는 점은 넘어가 주세요.',
+  '단, 냉장고 속 간식까지 예언할 수는 없습니다.',
+  '이 결과가 마음에 들지 않는다면 카드에게 항의해 주세요. 접수는 받지 않습니다.',
+  '오늘은 운이 좋습니다. 적어도 카드가 거꾸로 나오지는 않았으니까요.',
+  '행운이 찾아올 예정입니다. 정확한 도착 시간은 미정입니다.',
+  '카드가 잠시 고민하더니 좋은 하루를 보내라고 했습니다. 생각보다 단순하군요.',
+  '전시관의 안내인은 이 결과에 대해 어떠한 책임도 지지 않습니다.'
+];
 
-  addButton("모래시계 뒤집기", drawFortune);
-  addButton("전시관으로 돌아가기", closeModal);
+const warm = [
+  '당신의 하루가 조금 더 따뜻해지기를 바랍니다.',
+  '당신이 좋아하는 것들을 오래도록 즐길 수 있기를 바랍니다.',
+  '오늘도 당신을 응원하는 사람들이 있다는 사실을 잊지 마세요.',
+  '작은 행복들이 모여 오래 기억될 하루가 되기를 바랍니다.',
+  '앞으로 걸어갈 길에 웃음이 더 많아지기를 바랍니다.',
+  '당신이 건네는 이야기가 누군가에게는 소중한 시간이 될 수 있습니다.',
+  '서두르지 않아도 괜찮습니다. 좋은 순간은 저마다의 속도로 찾아옵니다.',
+  '당신다운 모습으로 하루를 채워 가기를 바랍니다.',
+  '오늘의 평범한 순간이 언젠가 좋은 추억이 되기를 바랍니다.',
+  '당신이 만들어 갈 다음 이야기도 기대하고 있습니다.'
+];
+
+const strange = [
+  '오늘 밤 달이 평소보다 수상하게 보인다면, 그냥 달이 수상한 것입니다.',
+  '세 번째로 마주치는 의자가 당신에게 중요한 의미를 가질지도 모릅니다. 아마 앉으라는 뜻이겠지요.',
+  '어딘가에서 당신의 이름을 부르는 듯한 기분이 들 수 있습니다. 먼저 방송 알림을 확인하세요.',
+  '오늘의 행운 방향은 왼쪽입니다. 단, 오른쪽에 맛있는 음식이 있다면 예외입니다.',
+  '카드가 미래를 보여 주려다가 갑자기 간식 이야기를 시작했습니다.',
+  '먼 곳에서 거대한 운명의 바람이 불어옵니다. 창문이 열려 있는지 확인해 주세요.',
+  '오늘의 비밀 암호는 감자입니다. 사용처는 아직 밝혀지지 않았습니다.',
+  '당신의 운명이 크게 움직입니다. 아마 의자를 조금 뒤로 밀었기 때문일 겁니다.'
+];
+
+const advice = [
+  '오늘은 새로운 것을 하나 시도해 보세요.',
+  '마음에 드는 음악을 한 곡 들어보세요.',
+  '잠깐 쉬면서 좋아하는 것을 즐겨 보세요.',
+  '평소 고마웠던 사람에게 짧은 인사를 건네보세요.',
+  '사소한 성공이라도 스스로 칭찬해 주세요.',
+  '오늘 있었던 재미있는 일을 하나 기억해 두세요.',
+  '너무 많은 것을 한 번에 해결하려 하지 마세요.',
+  '당신이 가장 즐거워하는 순간을 소중히 여겨 주세요.'
+];
+
+const pick = arr =>
+  arr[Math.floor(Math.random() * arr.length)];
+
+let lastFortune = '';
+let remainingCards = [];
+
+/* 22종을 모두 뽑기 전까지 카드 중복 방지 */
+
+function drawCard() {
+  if (!remainingCards.length) {
+    remainingCards = tarotCards.map((_, i) => i);
+  }
+
+  const n = Math.floor(Math.random() * remainingCards.length);
+  const index = remainingCards.splice(n, 1)[0];
+
+  return tarotCards[index];
 }
 
-function drawFortune() {
-  clearModal();
+/* 문장 자동 조합 */
 
-  const paper = document.createElement("div");
-  paper.className = "fortune-paper";
-  const index = Math.floor(Math.random() * fortunes.length);
-  paper.textContent = fortunes[index];
+function makeFortune(card) {
+  let result = '';
 
-  $("modalContent").append(paper);
-  addButton("다시 뽑기", drawFortune);
-  addButton("모래시계로 돌아가기", renderHourglass);
-  addButton("전시관으로 돌아가기", closeModal);
+  for (let i = 0; i < 12; i++) {
+    const r = Math.random();
+
+    let ending;
+
+    if (r < 0.35) {
+      ending = pick(funny);
+    } else if (r < 0.65) {
+      ending = pick(warm);
+    } else if (r < 0.85) {
+      ending = pick(strange);
+    } else {
+      ending = pick(warm) + '\n' + pick(funny);
+    }
+
+    result = [
+      pick(openings).replaceAll('{theme}', card[3]),
+      pick(middles),
+      pick(advice),
+      ending
+    ].join('\n\n');
+
+    if (result !== lastFortune) break;
+  }
+
+  lastFortune = result;
+  return result;
+}
+
+/* 카드 5장 보여 주기 */
+
+function renderTarot() {
+  openModal('EXHIBIT 03 · 운명의 타로 카드');
+
+  addText(
+    '오래된 전시대 위에 다섯 장의 카드가 놓여 있다.\n' +
+    '마음이 이끄는 카드 한 장을 골라 보자.'
+  ).style.whiteSpace = 'pre-line';
+
+  const deck = node('div', 'tarot-deck');
+
+  for (let i = 0; i < 5; i++) {
+    const card = btn(
+      '',
+      () => revealTarot(drawCard()),
+      'tarot-card'
+    );
+
+    card.setAttribute(
+      'aria-label',
+      `${i + 1}번째 타로 카드 선택`
+    );
+
+    deck.append(card);
+  }
+
+  $('modalContent').append(deck);
+
+  addButton('전시관으로 돌아가기', closeModal);
+}
+
+/* 카드 공개 및 운세 표시 */
+
+function revealTarot(card) {
+  openModal('EXHIBIT 03 · 운명의 타로 카드');
+
+  const view = node('div', 'tarot-reveal');
+
+  view.append(
+    node('div', 'tarot-english', card[1]),
+    node('div', 'tarot-symbol', card[2]),
+    node('h2', '', card[0]),
+    node('div', '', `✦ ${card[3]} ✦`)
+  );
+
+  $('modalContent').append(
+    view,
+    node('div', 'tarot-result', makeFortune(card))
+  );
+
+  addButton(
+    '같은 카드로 다시 해석하기',
+    () => revealTarot(card)
+  );
+
+  addButton('다른 카드 뽑기', renderTarot);
+  addButton('전시관으로 돌아가기', closeModal);
 }
 
 /* 방명록 */
 
-const GUEST_KEY = "dalgeuneul_guestbook_v1";
-const PAGE_SIZE = 12;
+const guestKey = 'birthday_tavern_guestbook_v1';
 
-function getEntries() {
+function loadEntries() {
   try {
-    const entries = JSON.parse(localStorage.getItem(GUEST_KEY) || "[]");
-    return Array.isArray(entries) ? entries : [];
+    const data = JSON.parse(
+      localStorage.getItem(guestKey) || '[]'
+    );
+
+    return Array.isArray(data) ? data : [];
   } catch {
     return [];
   }
 }
 
-function saveEntries(entries) {
-  try {
-    localStorage.setItem(GUEST_KEY, JSON.stringify(entries));
-    return true;
-  } catch {
-    return false;
-  }
-}
+function showGuestbook() {
+  openModal('EXHIBIT 04 · 방문객의 방명록');
 
-function renderGuestbook() {
-  clearModal();
+  addText('이곳에 오늘의 한마디를 남겨 주세요.');
 
-  const entries = getEntries();
-  const pages = Math.max(1, Math.ceil(entries.length / PAGE_SIZE));
-  guestPage = Math.max(0, Math.min(guestPage, pages - 1));
+  const name = node('input', 'field');
+  name.placeholder = '이름 또는 별명 (선택)';
+  name.maxLength = 30;
 
-  const book = document.createElement("div");
-  book.className = "book";
+  const message = node('textarea', 'field');
+  message.placeholder = '축하 메시지를 적어 주세요';
+  message.rows = 4;
+  message.maxLength = 500;
 
-  const title = document.createElement("h3");
-  title.textContent = "방문객의 기록";
-  book.append(title);
+  $('modalContent').append(name, message);
 
-  const start = guestPage * PAGE_SIZE;
-  const pageEntries = entries.slice(start, start + PAGE_SIZE);
+  const save = btn('메시지 남기기', () => {
+    const body = message.value.trim();
 
-  if (pageEntries.length === 0) {
-    const empty = document.createElement("p");
-    empty.textContent = "아직 이 책에 기록된 이름이 없습니다.";
-    book.append(empty);
-  }
-
-  pageEntries.forEach(entry => {
-    const button = document.createElement("button");
-    button.className = "book-entry";
-    button.textContent = "✒ " + entry.name;
-    button.onclick = () => showGuestMessage(entry);
-    book.append(button);
-  });
-
-  const indicator = document.createElement("div");
-  indicator.className = "page-indicator";
-  indicator.textContent = `${guestPage + 1} / ${pages} 페이지`;
-  book.append(indicator);
-
-  $("modalContent").append(book);
-
-  addButton("← 이전 페이지", () => {
-    guestPage--;
-    renderGuestbook();
-  });
-  $("modalActions").lastElementChild.disabled = guestPage === 0;
-
-  addButton("다음 페이지 →", () => {
-    guestPage++;
-    renderGuestbook();
-  });
-  $("modalActions").lastElementChild.disabled = guestPage >= pages - 1;
-
-  addButton("이름 남기기", renderGuestForm);
-  addButton("전시관으로 돌아가기", closeModal);
-
-  $("modalStatus").textContent =
-    "현재는 같은 브라우저에서만 기록이 보입니다.";
-}
-
-function showGuestMessage(entry) {
-  clearModal();
-
-  const book = document.createElement("div");
-  book.className = "book";
-
-  const title = document.createElement("h3");
-  title.textContent = entry.name;
-
-  const p = document.createElement("p");
-  p.style.whiteSpace = "pre-line";
-  p.textContent = entry.message || "남겨진 메시지가 없습니다.";
-
-  book.append(title, p);
-  $("modalContent").append(book);
-
-  addButton("방명록으로 돌아가기", renderGuestbook);
-}
-
-function renderGuestForm() {
-  clearModal();
-
-  const book = document.createElement("div");
-  book.className = "book";
-
-  const title = document.createElement("h3");
-  title.textContent = "방명록에 기록 남기기";
-
-  const form = document.createElement("form");
-
-  const name = document.createElement("input");
-  name.placeholder = "이름 (최대 12자, 필수)";
-  name.maxLength = 12;
-  name.required = true;
-
-  const message = document.createElement("textarea");
-  message.placeholder = "메시지 (최대 50자, 선택)";
-  message.maxLength = 50;
-
-  const submit = document.createElement("button");
-  submit.className = "btn";
-  submit.type = "submit";
-  submit.textContent = "기록 남기기";
-
-  form.append(name, message, submit);
-  book.append(title, form);
-  $("modalContent").append(book);
-
-  form.onsubmit = event => {
-    event.preventDefault();
-
-    const guestName = name.value.trim();
-    if (!guestName) {
-      $("modalStatus").textContent = "이름을 입력해 주세요.";
+    if (!body) {
+      alert('메시지를 입력해 주세요.');
       return;
     }
 
-    const entries = getEntries();
-    entries.push({
-      name: guestName.slice(0, 12),
-      message: message.value.trim().slice(0, 50),
-      date: new Date().toISOString()
+    const entries = loadEntries();
+
+    entries.unshift({
+      name: name.value.trim() || '이름 없는 손님',
+      body,
+      date: new Date().toLocaleDateString('ko-KR')
     });
 
-    if (saveEntries(entries)) {
-      guestPage = Math.floor((entries.length - 1) / PAGE_SIZE);
-      renderGuestbook();
-    } else {
-      $("modalStatus").textContent =
-        "저장하지 못했습니다. 브라우저 저장 설정을 확인해 주세요.";
+    try {
+      localStorage.setItem(
+        guestKey,
+        JSON.stringify(entries.slice(0, 100))
+      );
+    } catch {
+      alert('저장 공간을 사용할 수 없어요.');
     }
-  };
 
-  addButton("방명록으로 돌아가기", renderGuestbook);
+    showGuestbook();
+  });
+
+  $('modalContent').append(save);
+
+  const entries = loadEntries();
+
+  if (!entries.length) {
+    addText('아직 남겨진 메시지가 없습니다. 첫 번째 손님이 되어 주세요.');
+  }
+
+  for (const entry of entries) {
+    const item = node('div', 'guest-entry');
+
+    item.append(
+      node('strong', '', entry.name),
+      node('small', '', ` · ${entry.date}`),
+      node('p', '', entry.body)
+    );
+
+    $('modalContent').append(item);
+  }
+
+  addButton('전시관으로 돌아가기', closeModal);
 }
 
-/* 시작 */
+/* 마지막 문 */
+
+function showFinalDoor() {
+  openModal('마지막 문');
+
+  addText('전시관의 마지막 문이 조용히 빛나고 있다.');
+  addText('이 문을 열면 오늘을 위해 준비한 마지막 이야기가 시작된다.');
+
+  addButton('문 열기', () => {
+    closeModal();
+    renderBirthday();
+  });
+
+  addButton('조금 더 둘러보기', closeModal);
+}
+
+/* 생일 축하 화면 */
+
+function renderBirthday() {
+  screen = 'birthday';
+  app.replaceChildren();
+
+  const stage = node('main', 'stage');
+  const content = node('div', 'birthday');
+
+  content.append(
+    node('div', 'sparkle'),
+    node('div', 'cake', '🎂'),
+    node('h1', '', '생일 축하합니다!'),
+    node(
+      'p',
+      '',
+      '오늘만큼은 달그늘의 주인장도 특별한 손님입니다.\n' +
+      '이 작은 전시관이 즐거운 추억으로 남기를 바랍니다.\n' +
+      '앞으로도 웃음 가득한 날들이 이어지기를!'
+    )
+  );
+
+  content.lastChild.style.whiteSpace = 'pre-line';
+
+  content.append(
+    btn('전시관으로 돌아가기', renderGallery)
+  );
+
+  stage.append(content);
+  app.append(stage);
+}
+
+/* 사이트 시작 */
+
 renderScene();
+
 </script>
 </body>
 </html>
